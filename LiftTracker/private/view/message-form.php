@@ -1,0 +1,9 @@
+<?php
+    include($paths->GetHeaderIncludeFile());
+?>
+<?php
+    include($paths->GetMessageIncludeFile());
+?>
+<?php
+    include($paths->GetFooterIncludeFile());
+?>
