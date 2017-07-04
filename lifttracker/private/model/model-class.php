@@ -56,9 +56,9 @@ class Model
      */
     protected function GetDBConnection( )
     {
-        $dsn = 'mysql:host=localhost;dbname=sportspool';
-        $username = 'spwebuser';
-        $password = 'spwebuser123';
+        $dsn = 'mysql:host=localhost;dbname=lifttracker';
+        $username = 'lifttrackerwebuser';
+        $password = 'lifttrackerwebuser1234';
 
         try
         {
