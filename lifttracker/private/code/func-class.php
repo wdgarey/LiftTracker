@@ -1,19 +1,19 @@
 <?php
 
 /**
- * A user role
+ * The function class.
  */
-class Role {
+class Func {
   /**
    * The I.D.
-   * @var int 
+   * @var int
    */
-  private $mId;
+  private $id;
   /**
    * The name.
    * @var string 
    */
-  private $mName;
+  private $name;
   /**
    * Gets the I.D.
    * @return int The I.D.
@@ -32,44 +32,62 @@ class Role {
    * Gets the name.
    * @return string The name.
    */
-  public function GetName() {
+  public function getName() {
     return $this->mName;
   }
   /**
    * Sets the name.
    * @param string $name The name.
    */
-  public function SetName($name) {
+  public function setName($name) {
     $this->mName = $name;
   }
   /**
-   * Creates an instance of a role.
+   * Creates an instance of a function.
    */
-  public function Role() {
-    $this->mId = 0;
+  public function Func() {
+    $this->mId = -;
     $this->mName = "";
   }
   /**
-   * Gets the roles identifier.
+   * Initializes the function.
+   * @param array $row The row of data.
+   */
+  public function initialize($row) {
+    $idIdentifier = $this->getIdIdentifier();
+    $nameIdentifier = $this->getNameIdentifier();
+    if (isset($row[$idIdentifier])) {
+      $id = $row[$idIdentifier];
+
+      $this->setId($id);
+    }
+    if (isset($row[$nameIdentifier])) {
+      $name = $row[$nameIdentifier];
+
+      $this->setName($name);
+    }
+  }
+  /**
+   * Gets the function identifier.
    * @return string The identifier.
    */
   public function getIdentifier() {
-    return "role";
+    return "func";
   }
   /**
-   * Gets the role I.D. identifier.
+   * Gets the function I.D. identifier.
    * @return string The identifier.
    */
   public function getIdIdentifier() {
-    return "roleid";
+    return "id";
   }
   /**
-   * Gets the identifier of the name attribute.
+   * Get the function name identifier.
    * @return string The identifier.
    */
   public function getNameIdentifier() {
     return "name";
   }
 }
-?>
 
+?>
