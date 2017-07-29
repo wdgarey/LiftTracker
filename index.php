@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf=8" />
         <title>Lift Tracker</title>
-        <meta http-equiv="refresh" content="0; url=./lifttracker/public" />
+        <meta http-equiv="refresh" content="0; url=./lifttracker/main" />
     </head>
     <body>
     </body>
