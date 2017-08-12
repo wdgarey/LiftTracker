@@ -1,26 +1,20 @@
 <?php
-    include($paths->GetHeaderIncludeFile());
+require_once("../includes/header.php");
 ?>
 <?php
-    if (isset($message))
-    {
-        include($paths->GetMessageIncludeFile());
-    }
+include("../includes/message.php");
 ?>
 
-<form class="form-signin" method="POST" action="<?php echo($this->GetUrl($actions->GetProcessLoginAction())); ?>">
+<form class="form-signin" method="POST" action="../main/index.php?controller=default&action=loginprocess">
     <h2 class="form-signin-heading">Please sign in</h2>
-    <input type="hidden" name="<?php echo($requestedPageIdentifier); ?>" value="<?php echo($requestedPage); ?>" />
-    <label >Username</label>
-    <input type="text" placeholder="Username" required autofocus name="<?php echo($userNameIdentifier); ?>" class="form-control" value="<?php echo($this->GetHtmlSafeText($userName)); ?>" />
+    <label>Username</label>
+    <input type="text" placeholder="username" required autofocus name="username" class="form-control" value="<?php echo(htmlspecialchars($username)); ?>" />
     <label >Password</label>
-    <input type="password" placeholder="Password" required name="<?php echo($passwordIdentifier); ?>" class="form-control" value="<?php echo($this->GetHtmlSafeText($password)); ?>"/>
+    <input type="password" placeholder="password" required name="password" class="form-control" value="<?php echo(htmlspecialchars($password)); ?>"/>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 </form>
 
-<form class="form-signin" method="POST" action="<?php echo($this->GetUrl($actions->GetSelfAddAction())); ?>">
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-</form>
 <?php
-    include($paths->GetFooterIncludeFile());
+require_once("../includes/footer.php");
 ?>
+

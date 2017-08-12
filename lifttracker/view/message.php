@@ -1,9 +1,9 @@
 <?php
-    include($paths->GetHeaderIncludeFile());
+include("../includes/header.php");
 ?>
 <?php
-    include($paths->GetMessageIncludeFile());
+include("../includes/message.php");
 ?>
 <?php
-    include($paths->GetFooterIncludeFile());
+include("../includes/footer.php");
 ?>

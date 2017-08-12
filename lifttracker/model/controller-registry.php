@@ -1,12 +1,13 @@
 <?php
+require_once("controller.php");
 
 class ControllerRegistry {
   private static $sInst = null;
   public static function getInstance() {
-    if ($sInst == null) {
-      $sInst = new ControllerRegistry() {
+    if (ControllerRegistry::$sInst == null) {
+      ControllerRegistry::$sInst = new ControllerRegistry();
     }
-    return $sInst;
+    return ControllerRegistry::$sInst;
   }
   private $mRegistry;
   protected function getRegistry() {
@@ -24,19 +25,26 @@ class ControllerRegistry {
   }
   public function isRegistered($name) {
     $registry = $this->getRegistry ();
-    $registered = array_key_exists($key, $registry);
+    $registered = array_key_exists($name, $registry);
     return $registered;
   }
   public function register($controller) {
-    $key = $controller->getName ();
+    $name = $controller->getName ();
     $registry = $this->getRegistry ();
-    if ($this->isRegistered($key)) {
-      throw new Exception("The controller '$key' is already registered.");
+    if ($this->isRegistered($name)) {
+      throw new Exception("The controller '$name' is already registered.");
     } else {
-      $registry[$key] = $controller;
+      $registry[$name] = $controller;
     }
   }
+  public function get($name) {
+    $controller = null;
+    if ($this->isRegistered($name)) {
+      $registry = $this->getRegistry ();
+      $controller = $registry[$name];
+    }
+    return $controller;
+  }
 }
-
 ?>
 

@@ -1,10 +1,17 @@
 <?php
-
 class Utils {
   public const VALID_EMAIL_PATTERN = "/^[^@]*@[^@]*\.[^@]*$/";
   public const VALID_PHONE_PATTERN = "/^[0-9]{10}$/";
+  public static function adjustQuotes() {
+    if (get_magic_quotes_gpc() == true) {
+      array_walk_recursive($_GET, array($this, 'stripSlashes_Gpc'));
+      array_walk_recursive($_POST, array($this, 'stripSlashes_Gpc'));
+      array_walk_recursive($_COOKIE, array($this, 'stripSlashes_Gpc'));
+      array_walk_recursive($_REQUEST, array($this, 'stripSlashes_Gpc'));
+    }
+  }
   public static function getArg($name) {
-    $arg = NULL;
+    $arg = null;
     if (isset($_GET[$name])) {
       $arg = $_GET[$name];
     } else if (isset($_POST[$name])) {
@@ -56,7 +63,7 @@ class Utils {
       return date('Y-m-d', $phpDate);
     }
   }
-  function unsecureConnection($requestedPage = "") {
+  public static function unsecureConnection($requestedPage = "") {
     if (isset($_SERVER['HTTPS'])) {
       $url = "";
       if(empty($requestedPage)) {
@@ -68,6 +75,5 @@ class Utils {
     }
   }
 }
-
 ?>
 

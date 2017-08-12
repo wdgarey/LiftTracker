@@ -1,9 +1,8 @@
 <?php
-    include($paths->GetHeaderIncludeFile());
+include ('../includes/header.php');
 ?>
-
-<h1>Home page</h1>
-
+<h1>Hello world!</h1>
 <?php
-    include($paths->GetFooterIncludeFile());
+include ('../includes/footer.php');
 ?>
+

@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
 <?php
+require_once("../model/default-controller.php");
+
 if (!isset($dCharset)) { $dCharset = "UTF-8"; }
 if (!isset($dDescription)) { $dDescription = "A web app used for lifting."; }
 if (!isset($dTags) || !is_array($dTags)) { $dTags = array("lift", "tracker", "lifttracker"); }
@@ -66,7 +68,7 @@ foreach ($dTags as $tag)
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-              <?php if (true) { ?>
+              <?php if (!DefaultController::getInstance()->isLoggedIn ()) { ?>
                   <li><a href="#">Login/Sign-up</a></li>
               <?php } else { ?>
                   <li class="dropdown">

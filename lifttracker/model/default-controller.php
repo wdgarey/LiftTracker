@@ -1,16 +1,15 @@
 <?php
-
 require_once("controller.php");
 require_once("controller-registry.php");
 require_once("utils.php");
 
 class DefaultController implements Controller {
   private static $sInst;
-  public function getInstance() {
-    if ($sInst == null) {
-      $sInst = new DefaultController ();
+  public static function getInstance() {
+    if (DefaultController::$sInst == null) {
+      DefaultController::$sInst = new DefaultController ();
     }
-    return $sInst;
+    return DefaultController::$sInst;
   }
   private function __construct() {
   }
@@ -19,15 +18,13 @@ class DefaultController implements Controller {
   private function __wakeup() {
   }
   public function getName() {
-    return "DefaultController";
+    return "default";
   }
   public function handleRequest() {
-    $action = "";
+    $action = Utils::getArg("action");
     Utils::adjustQuotes();
-    if ($this->getArg("action") != NULL) {
-      $action = $this->getArg("action");
-    }
-    if(!$this->isLoggedIn() && $action != "login" && $action != "loginprocess") {
+    Utils::startSession();
+    if (!$this->isLoggedIn() && $action != "login" && $action != "loginprocess") {
       $url = "index.php?action=login";
       Utils::redirect($url);
     } else {
@@ -41,19 +38,67 @@ class DefaultController implements Controller {
       case "logout":
         $this->logout();
         break;
+      case null:
       default:
-        Utils::redirect("../index.php");
+        $this->home();
         break;
       }
     }
   }
+  public function home() {
+    include("../view/home.php");
+  }
   public function isLoggedIn() {
+    $isLoggedIn = (isset($_SESSION) && isset($_SESSION["user"]));
+    return $isLoggedIn;
+  }
+  protected function logout() {
+    if ($this->isLoggedIn()) {
+      unset($_SESSION["user"]);
+    }
+    Utils::redirect("../index.php");
+  }
+  protected function loginProcess() {
+    $msg = "";
+    if ($this->isLoggedIn ()) {
+      Utils::redirect("../index.php");
+    }
+    $username = Utils::getArg("username");
+    $password = Utils::getArg("password");
+
+    if ($username == null) {
+      $msg .= "No username given.";
+    }
+    if ($password == null) {
+      $msg .= "No password given.";
+    }
+    if (strlen($msg) == 0) {
+      $repository = new DefaultRepository();
+      $user = $repository->authenticate($username, $password);
+      if ($user == null) {
+        $msg = "Invalid username and/or password.";
+      } else {
+        $_SESSION["user"] = $user;
+      }
+    }
+
+    require ("../view/login.php");
+  }
+  protected function loginView() {
+    if ($this->isLoggedIn ()) {
+      Utils::redirect("../index.php");
+    }
+    $username = Utils::getArg("username");
+    $password = "";
+    if ($username == null) {
+      $username = "";
+    }
+    require ("../view/login.php");
   }
 }
 
 if (!ControllerRegistry::getInstance()->isRegistered(DefaultController::getInstance()->getName())) {
   ControllerRegistry::getInstance()->register(DefaultController::getInstance());
 }
-
 ?>
 
