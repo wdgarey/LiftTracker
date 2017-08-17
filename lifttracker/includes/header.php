@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-<?php
-require_once("../model/default-controller.php");
+    <?php
+      require_once("../model/default-controller.php");
 
-if (!isset($dCharset)) { $dCharset = "UTF-8"; }
-if (!isset($dDescription)) { $dDescription = "A web app used for lifting."; }
-if (!isset($dTags) || !is_array($dTags)) { $dTags = array("lift", "tracker", "lifttracker"); }
-if (!isset($dAuthor)) { $dAuthor = "Wesley Garey"; }
-if (!isset($dTitle)) { $dTitle = "Lift Tracker"; }
+      if (!isset($dCharset)) { $dCharset = "UTF-8"; }
+      if (!isset($dDescription)) { $dDescription = "A web app used for lifting."; }
+      if (!isset($dTags) || !is_array($dTags)) { $dTags = array("lift", "tracker", "lifttracker"); }
+      if (!isset($dAuthor)) { $dAuthor = "Wesley Garey"; }
+      if (!isset($dTitle)) { $dTitle = "Lift Tracker"; }
 
-$tags = "";
-foreach ($dTags as $tag)
-{
-  $tags .= $tag . " ";
-}
-?>
+      $tags = "";
+      foreach ($dTags as $tag) {
+        $tags .= $tag . " ";
+      }
+    ?>
     <meta charset="<?php echo($dCharset); ?>" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,6 +36,7 @@ foreach ($dTags as $tag)
     <script type="text/javascript" src="../js/bootstrap.js"></script>
   </head>
   <body>
+    <?php if (DefaultController::getInstance()->isLoggedIn ()) { ?>
     <div class="navbar-space"> </div>
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
@@ -68,21 +68,19 @@ foreach ($dTags as $tag)
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-              <?php if (!DefaultController::getInstance()->isLoggedIn ()) { ?>
                   <li><a href="#">Login/Sign-up</a></li>
-              <?php } else { ?>
                   <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">User<span class="caret"></span></a>
                       <ul class="dropdown-menu" role="menu">
                           <li><a href="#">Profile</a></li>
                           <li class="divider"></li>
-                          <li><a href="#">Logout</a></li>
+                          <li><a href="../main/index.php?controller=default&action=logout">Logout</a></li>
                       </ul>
                   </li>
-              <?php } ?>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+    <?php } ?>
     <div class="container">
 <!-- Begin content here -->             

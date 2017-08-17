@@ -18,7 +18,7 @@ CREATE TABLE enduser
 
 INSERT INTO enduser (id, username, password, vital) VALUES
   (1, 'root', Sha1('root'), 1),
-  (2, 'wdgarey', Sha1('Pimp9919'), 0);
+  (2, 'wdgarey', Sha1('pimp99'), 0);
 
 CREATE TABLE role
 (

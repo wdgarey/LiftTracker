@@ -1,6 +1,7 @@
 <?php
 require_once("controller.php");
 require_once("controller-registry.php");
+require_once("default-repository.php");
 require_once("utils.php");
 
 class DefaultController implements Controller {
@@ -25,7 +26,7 @@ class DefaultController implements Controller {
     Utils::adjustQuotes();
     Utils::startSession();
     if (!$this->isLoggedIn() && $action != "login" && $action != "loginprocess") {
-      $url = "index.php?action=login";
+      $url = "index.php?controller=default&action=login";
       Utils::redirect($url);
     } else {
       switch ($action) {
@@ -79,6 +80,7 @@ class DefaultController implements Controller {
         $msg = "Invalid username and/or password.";
       } else {
         $_SESSION["user"] = $user;
+        Utils::redirect("../index.php");
       }
     }
 

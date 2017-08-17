@@ -19,7 +19,7 @@ class DefaultRepository extends Repository {
     $stmt->closeCursor();
     if (count($users) == 1) {
       $user = new User();
-      $user->initialize($array);
+      $user->initialize($users[0]);
     }
     return $user;
   }

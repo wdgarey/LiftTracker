@@ -4,10 +4,10 @@ class Utils {
   public const VALID_PHONE_PATTERN = "/^[0-9]{10}$/";
   public static function adjustQuotes() {
     if (get_magic_quotes_gpc() == true) {
-      array_walk_recursive($_GET, array($this, 'stripSlashes_Gpc'));
-      array_walk_recursive($_POST, array($this, 'stripSlashes_Gpc'));
-      array_walk_recursive($_COOKIE, array($this, 'stripSlashes_Gpc'));
-      array_walk_recursive($_REQUEST, array($this, 'stripSlashes_Gpc'));
+      array_walk_recursive($_GET, array('Utils', 'stripSlashes_Gpc'));
+      array_walk_recursive($_POST, array('Utils', 'stripSlashes_Gpc'));
+      array_walk_recursive($_COOKIE, array('Utils', 'stripSlashes_Gpc'));
+      array_walk_recursive($_REQUEST, array('Utils', 'stripSlashes_Gpc'));
     }
   }
   public static function getArg($name) {
@@ -29,8 +29,8 @@ class Utils {
   }
   public static function secureConnection() {
     if ( !isset( $_SERVER['HTTPS'] ) ) {
-      $url = 'https://' . $_SERVER['HTTP_HOST'] . $this->getRequestedUri();
-      $this->redirect($url);
+      $url = 'https://' . $_SERVER['HTTP_HOST'] . Utils::getRequestedUri();
+      Utils::redirect($url);
     }
   }
   public static function startSession() {
@@ -67,11 +67,11 @@ class Utils {
     if (isset($_SERVER['HTTPS'])) {
       $url = "";
       if(empty($requestedPage)) {
-        $url = 'http://' . $_SERVER['HTTP_HOST'] . $this->getRequestedUri();
+        $url = 'http://' . $_SERVER['HTTP_HOST'] . Utils::getRequestedUri();
       } else {
         $url = 'http://' . $_SERVER['HTTP_HOST'] . $requestedPage;
       }
-      $this->redirect($url);
+      Utils::redirect($url);
     }
   }
 }
