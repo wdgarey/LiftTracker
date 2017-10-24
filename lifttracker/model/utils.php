@@ -20,7 +20,7 @@ class Utils {
     return $arg;
   }
   public static function getRequestedUri() {
-    $uri = urlencode($_SERVER['REQUEST_URI']);
+    $uri = $_SERVER['REQUEST_URI'];
     return $uri;
   }
   public static function redirect($url) {

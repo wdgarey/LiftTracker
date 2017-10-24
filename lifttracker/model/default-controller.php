@@ -25,6 +25,11 @@ class DefaultController implements Controller {
     $action = Utils::getArg("action");
     Utils::adjustQuotes();
     Utils::startSession();
+    if ($action == "login" || $action == "loginprocess") {
+      Utils::secureConnection();
+    } else {
+      Utils::unsecureConnection();
+    }
     if (!$this->isLoggedIn() && $action != "login" && $action != "loginprocess") {
       $url = "index.php?controller=default&action=login";
       Utils::redirect($url);
@@ -39,7 +44,6 @@ class DefaultController implements Controller {
       case "logout":
         $this->logout();
         break;
-      case null:
       default:
         $this->home();
         break;
