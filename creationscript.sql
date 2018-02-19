@@ -7,187 +7,200 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON lifttracker.* TO 'lifttrackerwebuser'@'l
 
 USE lifttracker;
 
+DROP TABLE IF EXISTS enduser;
 CREATE TABLE enduser
 (
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-	username VARCHAR(32),
-	password VARCHAR(40) NOT NULL,
-	vital tinyint(1) NOT NULL DEFAULT 0,
-  CONSTRAINT ENDUSER_PK PRIMARY KEY (username)
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  username VARCHAR(32) NOT NULL UNIQUE,
+  pwd VARCHAR(40) NOT NULL,
+  vital tinyint(1) NOT NULL DEFAULT 0,
+  firstname VARCHAR(40) DEFAULT '',
+  lastname VARCHAR(40) DEFAULT '',
+  height NUMERIC(5, 2),
+  weight NUMERIC(5, 2),
+  CONSTRAINT enduser_pk PRIMARY KEY (username)
 ) ENGINE=InnoDB;
 
-INSERT INTO enduser (id, username, password, vital) VALUES
-  (1, 'root', Sha1('root'), 1),
+INSERT INTO enduser (id, username, pwd, vital) VALUES
+  (1, 'admin', Sha1('pimp99'), 1),
   (2, 'wdgarey', Sha1('pimp99'), 0);
 
 CREATE TABLE role
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  name VARCHAR(32) NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,
   vital tinyint(1) NOT NULL DEFAULT 0,
-  CONSTRAINT ROLE_PK PRIMARY KEY (name)
+  CONSTRAINT role_pk PRIMARY KEY (title)
 ) ENGINE=InnoDB;
 
-INSERT INTO role (id, name, vital) VALUES (1, 'Admin', 1);
+INSERT INTO role (id, title, vital) VALUES (1, 'admin', 1);
 
 CREATE TABLE func
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  name VARCHAR(32) NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,
   vital tinyint(1) NOT NULL DEFAULT 0,
-  CONSTRAINT FUNCTION_PK PRIMARY KEY (name)
+  CONSTRAINT function_pk PRIMARY KEY (title)
 ) ENGINE=InnoDB;
 
-INSERT INTO func (id, name, vital) VALUES
+INSERT INTO func (id, title, vital) VALUES
   (1, 'enduseradd', 1),
   (2, 'enduseredit', 1),
   (3, 'enduserview', 1),
   (4, 'enduserdelete', 1),
-	(5, 'manageendusers', 1),
-	(6, 'roleadd', 1),
-	(7, 'roleedit', 1),
-	(8, 'roleview', 1),
-	(9, 'roledelete', 1),
-	(10, 'manageroles', 1);
+  (5, 'manageendusers', 1),
+  (6, 'roleadd', 1),
+  (7, 'roleedit', 1),
+  (8, 'roleview', 1),
+  (9, 'roledelete', 1),
+  (10, 'manageroles', 1);
 
-CREATE TRIGGER GIVFUNCTOADMIN_TRIG
+CREATE TRIGGER givfunctoadmin_trig
 AFTER INSERT ON func
-	FOR EACH ROW
-		INSERT INTO rolefunc (roleid, funcid)
-		VALUES(1, NEW.id);
+  FOR EACH ROW
+    INSERT INTO rolefunc (roleid, funcid)
+    VALUES(1, NEW.id);
 
 CREATE TABLE enduserrole
 (
-  enduserid INT,
-  roleid INT,
-  CONSTRAINT ENDUSERROLE_PK PRIMARY KEY (enduserid, roleid),
-  CONSTRAINT ENDUSERROLE_ROLE_FK FOREIGN KEY(roleid) REFERENCES role(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT ENDUSERROLE_USER_FK FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
+  roleid INT NOT NULL,
+  enduserid INT NOT NULL,
+  CONSTRAINT enduserrole_pk PRIMARY KEY (enduserid, roleid),
+  CONSTRAINT enduserrole_role_fk FOREIGN KEY(roleid) REFERENCES role(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT enduserrole_user_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 INSERT INTO enduserrole (enduserid, roleid) VALUES
-	(1, 1),
-	(2, 1);
+  (1, 1),
+  (2, 1);
 
 CREATE TABLE rolefunc
 (
-  roleid INT,
-  funcid INT,
-  CONSTRAINT ROLEFUNCTION_PK PRIMARY KEY (roleid, funcid),
-  CONSTRAINT ROLEFUNCTION_FUNCTION_FK FOREIGN KEY (funcid) REFERENCES func(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT ROLEFUNCTION_ROLE_FK FOREIGN KEY (roleid) REFERENCES role (id) ON DELETE CASCADE ON UPDATE CASCADE
+  roleid INT NOT NULL,
+  funcid INT NOT NULL,
+  CONSTRAINT rolefunc_pk PRIMARY KEY (roleid, funcid),
+  CONSTRAINT rolefunc_func_fk FOREIGN KEY (funcid) REFERENCES func(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT rolefunc_role_fk FOREIGN KEY (roleid) REFERENCES role(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 INSERT INTO rolefunc (roleid, funcid) VALUES
-	(1, 1),
-	(1, 2),
-	(1, 3),
-	(1, 4),
-	(1, 5),
-	(1, 6),
-	(1, 7),
-	(1, 8),
-	(1, 9),
-	(1, 10);
+  (1, 1),
+  (1, 2),
+  (1, 3),
+  (1, 4),
+  (1, 5),
+  (1, 6),
+  (1, 7),
+  (1, 8),
+  (1, 9),
+  (1, 10);
 
-CREATE TABLE profile
+CREATE TABLE liftgrp
 (
-  enduserid INT,
-	firstname VARCHAR(40) DEFAULT '',
-	lastname VARCHAR(40) DEFAULT '',
-	height NUMERIC(5, 2),
-	weight NUMERIC(5, 2),
-  CONSTRAINT PROFILE_PK PRIMARY KEY (enduserid),
-  CONSTRAINT PROFILE_USER_FK FOREIGN KEY (enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
-
-CREATE TABLE liftgroup
-(
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  enduserid INT,
-	name VARCHAR(32),
-	autoupdate tinyint(1) DEFAULT FALSE,
-	autoupdatedate DATE,
-	autoupdateincrement NUMERIC(4, 2) DEFAULT 0.0,
-  CONSTRAINT LIFTGROUP_PK PRIMARY KEY(enduserid, name),
-  CONSTRAINT LIFTGROUP_USER_FK FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  enduserid INT NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,
+  autoupdate tinyint(1) DEFAULT FALSE,
+  autoupdatedate DATE,
+  autoupdateincrement NUMERIC(4, 2) DEFAULT 0.0,
+  CONSTRAINT liftgrp_pk PRIMARY KEY(enduserid, title),
+  CONSTRAINT liftgrp_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE lift
 (
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-	liftgroupid INT,
-	name VARCHAR(32),	
-	trainingweight NUMERIC(6, 2) NOT NULL DEFAULT 0.0,
-	CONSTRAINT LIFT_PK PRIMARY KEY(liftgroupid, name),
-	CONSTRAINT LIFT_LIFTGROUP_FK FOREIGN KEY(liftgroupid) REFERENCES liftgroup(id) ON DELETE CASCADE ON UPDATE CASCADE
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  enduserid INT NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,	
+  trainingweight NUMERIC(6, 2) NOT NULL DEFAULT 0.0,
+  CONSTRAINT lift_pk PRIMARY KEY(title),
+  CONSTRAINT lift_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE liftrecord
+CREATE TABLE liftgrplift
 (
-	id INT AUTO_INCREMENT,
-	liftid INT NOT NULL,
-	day DATE NOT NULL,
-	weight NUMERIC(6, 2) NOT NULL DEFAULT 0.0,
-	reps INT NOT NULL DEFAULT 0,
-	CONSTRAINT LIFTRECORD_PK PRIMARY KEY (id),
-	CONSTRAINT LIFTRECORD_LIFT_FK FOREIGN KEY(liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE
+  liftgrpid INT NOT NULL,
+  liftid INT NOT NULL,
+  CONSTRAINT liftgrplift_pk PRIMARY KEY (liftgrpid, liftid),
+  CONSTRAINT liftgrplift_liftgrp_fk FOREIGN KEY (liftgrpid) REFERENCES liftgrp(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT liftgrplift_lift_fk FOREIGN KEY (liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE scheme
+CREATE TABLE liftrec
 (
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  enduserid INT,
-	name VARCHAR(32),	
-  CONSTRAINT SCHEME_PK PRIMARY KEY(enduserid, name),
-  CONSTRAINT SCHEME_USER_FK FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
+  id INT AUTO_INCREMENT,
+  liftid INT NOT NULL,
+  occurence DATE NOT NULL,
+  weight NUMERIC(6, 2) NOT NULL DEFAULT 0.0,
+  reps INT NOT NULL DEFAULT 0,
+  CONSTRAINT liftrec_pk PRIMARY KEY (id),
+  CONSTRAINT liftrec_lift_fk FOREIGN KEY(liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE week
+CREATE TABLE workplan
 (
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-	schemeid INT,
-	name VARCHAR(32),	
-	CONSTRAINT WEEK_PK PRIMARY KEY(schemeid, name),
-	CONSTRAINT WEEK_SCHEME_FK FOREIGN KEY(schemeid) REFERENCES scheme(id) ON DELETE CASCADE ON UPDATE CASCADE
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  enduserid INT NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,	
+  CONSTRAINT workplan_pk PRIMARY KEY(enduserid, title),
+  CONSTRAINT workplan_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE day
+CREATE TABLE workweek
 (
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-	weekid INT,
-	name VARCHAR(32),
-	CONSTRAINT DAY_PK PRIMARY KEY(weekid, name),
-	CONSTRAINT DAY_WEEK_FK FOREIGN KEY(weekid) REFERENCES week(id) ON DELETE CASCADE ON UPDATE CASCADE
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  workplanid INT NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,	
+  CONSTRAINT workweek_pk PRIMARY KEY(workplanid, title),
+  CONSTRAINT workweek_workplan_fk FOREIGN KEY(workplanid) REFERENCES workplan(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE workday
+(
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  workweekid INT NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,
+  CONSTRAINT workday_pk PRIMARY KEY(workweekid, title),
+  CONSTRAINT workday_workweek_fk FOREIGN KEY(workweekid) REFERENCES workweek(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE workout
 (
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-	dayid INT,
-	name VARCHAR(32),
-	CONSTRAINT WORKOUT_PK PRIMARY KEY(dayid, name),
-	CONSTRAINT WORKOUT_DAY_FK FOREIGN KEY(dayid) REFERENCES day(id) ON DELETE CASCADE ON UPDATE CASCADE
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  enduserid INT NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,
+  CONSTRAINT workout_pk PRIMARY KEY(enduserid, title),
+  CONSTRAINT workout_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE exercise
 (
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-	workoutid INT,
-	name VARCHAR(32),
-	liftid INT NOT NULL,
-	CONSTRAINT EXERCISE_PK PRIMARY KEY(workoutid, name),
-	CONSTRAINT EXERCISE_LIFT_FK FOREIGN KEY(liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT EXERCISE_WORKOUT_FK FOREIGN KEY(workoutid) REFERENCES workout(id) ON DELETE CASCADE ON UPDATE CASCADE
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  enduserid INT NOT NULL,
+  title VARCHAR(32) NOT NULL UNIQUE,
+  CONSTRAINT exercise_pk PRIMARY KEY(enduserid, title),
+  CONSTRAINT exercise_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE sset
+CREATE TABLE exerciseset
 (
-	id INT NOT NULL UNIQUE AUTO_INCREMENT,
-	exerciseid INT,
-	name VARCHAR(32),
-	percent NUMERIC(2, 2) NOT NULL,
-	reps INT NOT NULL,
-	CONSTRAINT SSET_PK PRIMARY KEY(exerciseid, name),
-	CONSTRAINT SSET_EXERCISE_FK FOREIGN KEY(exerciseid) REFERENCES exercise(id) ON DELETE CASCADE ON UPDATE CASCADE
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  exerciseid INT,
+  title VARCHAR(32) NOT NULL UNIQUE,
+  percent NUMERIC(2, 2) NOT NULL,
+  reps INT NOT NULL,
+  CONSTRAINT iteration_pk PRIMARY KEY(exerciseid, title),
+  CONSTRAINT iteration_exercise_fk FOREIGN KEY(exerciseid) REFERENCES exercise(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE exerciseinst
+(
+  id INT NOT NULL UNIQUE AUTO_INCREMENT,
+  exerciseid INT NOT NULL,
+  workoutid INT NOT NULL,
+  liftid INT,
+  CONSTRAINT exerciseinst_pk PRIMARY KEY (id),
+  CONSTRAINT exerciseinst_exercise_fk FOREIGN KEY(exerciseid) REFERENCES exercise(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT exerciseinst_workout_fk FOREIGN KEY(workoutid) REFERENCES workout(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT exerciseinst_lift_fk FOREIGN KEY(liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;

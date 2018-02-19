@@ -28,10 +28,11 @@ class Utils {
     exit();
   }
   public static function secureConnection() {
-    if ( !isset( $_SERVER['HTTPS'] ) ) {
-      $url = 'https://' . $_SERVER['HTTP_HOST'] . Utils::getRequestedUri();
-      Utils::redirect($url);
-    }
+    Utils::unsecureConnection();
+    //if (!isset($_SERVER['HTTPS'])) {
+      //$url = 'https://' . $_SERVER['HTTP_HOST'] . Utils::getRequestedUri();
+      //Utils::redirect($url);
+    //}
   }
   public static function startSession() {
     if (!isset($_SESSION)) {
