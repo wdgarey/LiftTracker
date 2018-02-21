@@ -124,8 +124,6 @@ class DefaultController implements Controller {
     $userName = "";
     $firstName = "";
     $lastName = "";
-    $height = 0.0;
-    $weight = 0.0;
     $email = "";
     $password = "";
     $passwordRetype = "";
@@ -133,14 +131,24 @@ class DefaultController implements Controller {
     require("../view/selfaddedit.php");
   }
   protected function signupProcess() {
+    $userId = Utils::getArg("userid");
     $username = Utils::getArg("username");
     $firstName = Utils::getArg("firstname");
-    $lastName = Utils::getArg("lastName");
+    $lastName = Utils::getArg("lastname");
     $height = Utils::getArg("height");
     $weight = Utils::getArg("weight");
     $email = Utils::getArg("email");
     $password = Utils::getArg("password");
     $passwordRetype = Utils::getArg("passwordretype");
+
+
+    if (count($msgList) > 0) {
+      if ($userId == null) {
+        $msg = "Could not create account.";
+      } else {
+        $msg = "Could not update account.";
+      }
+    }
 
     require("../view/selfaddedit.php");
   }

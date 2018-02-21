@@ -19,9 +19,9 @@
         <label>Last Name</label>
         <input type="text" name="lastname" value="<?php echo(htmlspecialchars($lastName)); ?>" class="form-control" placeholder="Last" required autofocus />
         <label>Height (in inches)</label>
-        <input type="number" name="height" value="<?php echo(htmlspecialchars($height)); ?>" class="form-control" placeholder="72" required autofocus />
+        <input type="number" name="height" value="<?php if (isset($height)) { echo(htmlspecialchars($height)); } ?>" class="form-control" placeholder="72" required autofocus />
         <label>Weight (in pounds)</label>
-        <input type="number" name="weight" value="<?php echo(htmlspecialchars($weight)); ?>" class="form-control" placeholder="180" required autofocus />
+        <input type="number" name="weight" value="<?php if (isset ($weight)) { echo(htmlspecialchars($weight)); } ?>" class="form-control" placeholder="180" required autofocus />
         <label>Email</label>
         <input type="email" name="email" value="<?php echo(htmlspecialchars($email)); ?>" class="form-control" placeholder="Email" required autofocus />
         <label>Password</label>
