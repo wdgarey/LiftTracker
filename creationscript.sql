@@ -1,29 +1,29 @@
 DROP DATABASE IF EXISTS lifttracker;
 CREATE DATABASE lifttracker;
 
-DROP USER 'lifttrackerwebuser'@'localhost';
+DROP USER IF EXISTS 'lifttrackerwebuser'@'localhost';
 CREATE USER 'lifttrackerwebuser'@'localhost' IDENTIFIED BY 'lifttrackerwebuser1234';
 GRANT SELECT, UPDATE, INSERT, DELETE ON lifttracker.* TO 'lifttrackerwebuser'@'localhost';
 
 USE lifttracker;
 
-DROP TABLE IF EXISTS enduser;
 CREATE TABLE enduser
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   username VARCHAR(32) NOT NULL UNIQUE,
+  email VARCHAR(100) NOT NULL,
   pwd VARCHAR(40) NOT NULL,
   vital tinyint(1) NOT NULL DEFAULT 0,
-  firstname VARCHAR(40) DEFAULT '',
-  lastname VARCHAR(40) DEFAULT '',
-  height NUMERIC(5, 2),
-  weight NUMERIC(5, 2),
+  firstname VARCHAR(40) NOT NULL DEFAULT '',
+  lastname VARCHAR(40) NOT NULL DEFAULT '',
+  height NUMERIC(5, 2) NOT NULL DEFAULT 0,
+  weight NUMERIC(5, 2) NOT NULL DEFAULT 0,
   CONSTRAINT enduser_pk PRIMARY KEY (username)
 ) ENGINE=InnoDB;
 
-INSERT INTO enduser (id, username, pwd, vital) VALUES
-  (1, 'admin', Sha1('pimp99'), 1),
-  (2, 'wdgarey', Sha1('pimp99'), 0);
+INSERT INTO enduser (id, username, email, pwd, vital, firstname, lastname, height, weight) VALUES
+  (1, 'admin', '', Sha1('pimp99'), 1, '', '', 0, 0),
+  (2, 'wdgarey', 'w.d.garey@eagle.clarion.edu', Sha1('pimp99'), 0, 'Wes', 'G', 68, 160);
 
 CREATE TABLE role
 (

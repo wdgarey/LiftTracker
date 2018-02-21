@@ -4,6 +4,8 @@ require_once("controller-registry.php");
 require_once("default-repository.php");
 require_once("utils.php");
 
+error_reporting (E_ALL);
+
 class DefaultController implements Controller {
   private static $sInst;
   public static function getInstance() {
@@ -21,6 +23,13 @@ class DefaultController implements Controller {
   public function getName() {
     return "default";
   }
+  public function getUser() {
+    $user = new User();
+    if ($this->isLoggedIn()) {
+      $user = $_SESSION["user"];
+    }
+    return $user;
+  }
   public function handleRequest() {
     $action = Utils::getArg("action");
     Utils::adjustQuotes();
@@ -30,7 +39,11 @@ class DefaultController implements Controller {
     } else {
       Utils::unsecureConnection();
     }
-    if (!$this->isLoggedIn() && $action != "login" && $action != "loginprocess") {
+    if (!$this->isLoggedIn()
+        && $action != "login"
+        && $action != "loginprocess"
+        && $action != "signup"
+        && $action != "signupprocess") {
       $url = "index.php?controller=default&action=login";
       Utils::redirect($url);
     } else {
@@ -43,6 +56,12 @@ class DefaultController implements Controller {
         break;
       case "logout":
         $this->logout();
+        break;
+      case "signup":
+        $this->signupView();
+        break;
+      case "signupprocess":
+        $this->signupProcess();
         break;
       default:
         $this->home();
@@ -100,6 +119,30 @@ class DefaultController implements Controller {
       $username = "";
     }
     require ("../view/login.php");
+  }
+  protected function signupView() {
+    $userName = "";
+    $firstName = "";
+    $lastName = "";
+    $height = 0.0;
+    $weight = 0.0;
+    $email = "";
+    $password = "";
+    $passwordRetype = "";
+
+    require("../view/selfaddedit.php");
+  }
+  protected function signupProcess() {
+    $username = Utils::getArg("username");
+    $firstName = Utils::getArg("firstname");
+    $lastName = Utils::getArg("lastName");
+    $height = Utils::getArg("height");
+    $weight = Utils::getArg("weight");
+    $email = Utils::getArg("email");
+    $password = Utils::getArg("password");
+    $passwordRetype = Utils::getArg("passwordretype");
+
+    require("../view/selfaddedit.php");
   }
 }
 
