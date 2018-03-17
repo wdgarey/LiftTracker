@@ -2,6 +2,9 @@
 require_once("controller.php");
 require_once("controller-registry.php");
 require_once("default-repository.php");
+require_once("password-validator.php");
+require_once("user.php");
+require_once("user-validator.php");
 require_once("utils.php");
 
 error_reporting (E_ALL);
@@ -25,7 +28,7 @@ class DefaultController implements Controller {
   }
   public function getUser() {
     $user = new User();
-    if ($this->isLoggedIn()) {
+    if (DefaultController::getInstance()->isLoggedIn()) {
       $user = $_SESSION["user"];
     }
     return $user;
@@ -34,7 +37,8 @@ class DefaultController implements Controller {
     $action = Utils::getArg("action");
     Utils::adjustQuotes();
     Utils::startSession();
-    if ($action == "login" || $action == "loginprocess") {
+    if ($action == "login"
+        || $action == "loginprocess") {
       Utils::secureConnection();
     } else {
       Utils::unsecureConnection();
@@ -89,7 +93,6 @@ class DefaultController implements Controller {
     }
     $username = Utils::getArg("username");
     $password = Utils::getArg("password");
-
     if ($username == null) {
       $msg .= "No username given.";
     }
@@ -97,16 +100,15 @@ class DefaultController implements Controller {
       $msg .= "No password given.";
     }
     if (strlen($msg) == 0) {
-      $repository = new DefaultRepository();
-      $user = $repository->authenticate($username, $password);
+      $user = DefaultRepository::getInstance()->authenticate($username, $password);
       if ($user == null) {
         $msg = "Invalid username and/or password.";
       } else {
-        $_SESSION["user"] = $user;
+        $this->setUser($user);
         Utils::redirect("../index.php");
       }
     }
-
+    $password = "";
     require ("../view/login.php");
   }
   protected function loginView() {
@@ -120,10 +122,15 @@ class DefaultController implements Controller {
     }
     require ("../view/login.php");
   }
+  protected function setUser($user) {
+    $_SESSION["user"] = $user;
+  }
   protected function signupView() {
     $userName = "";
     $firstName = "";
     $lastName = "";
+    $height = "";
+    $weight = "";
     $email = "";
     $password = "";
     $passwordRetype = "";
@@ -131,7 +138,7 @@ class DefaultController implements Controller {
     require("../view/selfaddedit.php");
   }
   protected function signupProcess() {
-    $userId = Utils::getArg("userid");
+    $user = null;
     $username = Utils::getArg("username");
     $firstName = Utils::getArg("firstname");
     $lastName = Utils::getArg("lastname");
@@ -140,16 +147,75 @@ class DefaultController implements Controller {
     $email = Utils::getArg("email");
     $password = Utils::getArg("password");
     $passwordRetype = Utils::getArg("passwordretype");
-
-
-    if (count($msgList) > 0) {
-      if ($userId == null) {
-        $msg = "Could not create account.";
+    $isLoggedIn = $this->isLoggedIn();
+    //Check to see if this an update or a create.
+    if ($isLoggedIn) {
+      $userId = $this->getUser()->getId();
+      $user = DefaultRepository::getInstance()->getUser($userId);
+      if ($user == null) {
+        $msgList[] = "User not found.";
       } else {
-        $msg = "Could not update account.";
+        $user->setFirstName($firstName);
+        $user->setLastName($lastName);
+        $user->setHeight($height);
+        $user->setWeight($weight);
+        $user->setEmail($email);
+      }
+    } else {
+      //This is a create. 
+      $user = new User();
+      $user->setUserId(0);
+      $user->setUsername($username);
+      $user->setFirstName($firstName);
+      $user->setLastName($lastName);
+      $user->setHeight($height);
+      $user->setWeight($weight);
+      $user->setEmail($email);
+      $user->SetVital(false);
+      //Make sure the username is not taken.
+      if (DefaultRepository::getInstance()->isExsitingUser($username)) {
+        //The user name is taken.
+        $msgList[] = "The username is already taken.";
       }
     }
-
+    $msgList = array_merge($msgList, UserValidator::getInstance()->validate($user));
+    if (!$isLoggedIn
+        || (isset($password)
+            && strlen($password) > 0)) {
+      $msgList = array_merge($msgList, PasswordValidator::getInstance()->validate($password, $passwordRetype));
+    }
+    //Check to see if there were any invalid inputs.
+    if (isset($msgList)
+        && count($msgList) > 0) {
+      //There were invalid inputs.
+      if ($isLoggedIn) {
+        $msg = "Could not update account.";
+      } else {
+        $msg = "Could not create account.";
+      }
+    } else {
+      //There were no invalid inputs.
+      if ($isLoggedIn) {
+        //Update account.
+        //View profile.
+        $user = DefaultRepository::getInstance()->updateUser($user);
+        if (isset($password)
+            && strlen($password) > 0) {
+            DefaultRepository::getInstance()->updatePassword($user->getId(), $password);
+        }
+        $this->setUser($user);
+        Utils::redirect("index.php?controller=default&action=selfview");
+      } else {
+        //Create account.
+        //Login.
+        //Home page.
+        $user = DefaultRepository::getInstance()->createUser($user, $password);
+        $this->setUser($user);
+        Utils::redirect("index.php?controller=default&action=home");
+      }
+    }
+    $password = "";
+    $passwordRetype = "";
     require("../view/selfaddedit.php");
   }
 }

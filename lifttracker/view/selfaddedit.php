@@ -9,8 +9,7 @@
       <h1>Create Account</h1>
 <?php } ?>
       <form class="form-signin" method="POST" action="<?php echo("../main/index.php?controller=default&action=signupprocess"); ?>">
-<?php if (DefaultController::getInstance()->isLoggedIn()) { ?>
-        <input type="hidden" id="userid" value="<?php echo(DefaultController::getInstance()->getUser()->getId()); ?>" />
+<?php if (!DefaultController::getInstance()->isLoggedIn()) { ?>
         <label>Username</label>
         <input type="text" name="username" value="<?php echo(htmlspecialchars($userName)); ?>" class="form-control" placeholder="Username" required autofocus />
 <?php } ?>
