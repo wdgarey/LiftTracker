@@ -8,10 +8,13 @@
 <?php } else { ?>
       <h1>Create Account</h1>
 <?php } ?>
-      <form class="form-signin" method="POST" action="<?php echo("../main/index.php?controller=default&action=signupprocess"); ?>">
+<?php
+  include("../includes/message.php");
+?>
+      <form class="form-signin" method="POST" action="<?php echo("../main/index.php?controller=default&action=selfaddeditprocess"); ?>">
 <?php if (!DefaultController::getInstance()->isLoggedIn()) { ?>
         <label>Username</label>
-        <input type="text" name="username" value="<?php echo(htmlspecialchars($userName)); ?>" class="form-control" placeholder="Username" required autofocus />
+        <input type="text" name="username" value="<?php echo(htmlspecialchars($username)); ?>" class="form-control" placeholder="Username" required autofocus />
 <?php } ?>
         <label>First Name</label>
         <input type="text" name="firstname" value="<?php echo(htmlspecialchars($firstName)); ?>" class="form-control" placeholder="First" required autofocus />

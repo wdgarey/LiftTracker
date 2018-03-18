@@ -25,12 +25,12 @@ class UserValidator {
     $msgList = array_merge($msgList, $this->validateLastName($user->getLastName()));
     $msgList = array_merge($msgList, $this->validateHeight($user->getHeight()));
     $msgList = array_merge($msgList, $this->validateWeight($user->getWeight()));
+    return $msgList;
   }
   public function validateId($userId) {
-    if ($userId != null
-        && is_numeric($userId)
+    if (is_numeric($userId)
         && $userId > -1
-        && $userId == round($userId, 0)) {
+        && $userId == (int)$userId) {
       $msgList = array();
     } else {
       $msgList[] = "The user ID is not an integer.";
@@ -38,8 +38,7 @@ class UserValidator {
     return $msgList;
   }
   public function validateUsername($username) {
-    if ($username != null
-        && is_string($username)
+    if (is_string($username)
         && strlen($username) > 0
         && strlen($username) < 33) {
       $msgList = array();
@@ -49,8 +48,7 @@ class UserValidator {
     return $msgList;
   }
   public function validateEmail($email) {
-    if ($email != null
-        && is_string($email)
+    if (is_string($email)
         && strlen($email) > 0
         && strlen($email) < 101) {
       if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -64,17 +62,15 @@ class UserValidator {
     return $msgList;
   }
   public function validateVital($vital) {
-    if ($vital != null
-        && is_bool($vital)) {
+    if (is_bool($vital)) {
       $msgList = array();
     } else {
-      $msgList[] = "Invalid vital property given.";
+      $msgList[] = "Invalid vital property '$vital' given.";
     }
     return $msgList;
   }
   public function validateFirstName($firstName) {
-    if ($firstName != null
-        && is_string($firstName)
+    if (is_string($firstName)
         && strlen($firstName) > 0
         && strlen($firstName) < 41) {
       $msgList = array();
@@ -84,8 +80,7 @@ class UserValidator {
     return $msgList;
   }
   public function validateLastName($lastName) {
-    if ($lastName != null
-        && is_string($lastName)
+    if (is_string($lastName)
         && strlen($lastName) > 0
         && strlen($lastName) < 41) {
       $msgList = array();
@@ -94,8 +89,7 @@ class UserValidator {
     }
     return $msgList;  }
   public function validateHeight($height) {
-    if ($height != null
-        && is_numeric($height)
+    if (is_numeric($height)
         && $height > 0) {
       $msgList = array();
     } else {
@@ -104,8 +98,7 @@ class UserValidator {
     return $msgList;
   }
   public function validateWeight($weight) {
-    if ($weight != null
-        && is_numeric($weight)
+    if (is_numeric($weight)
         && $weight > 0) {
       $msgList = array();
     } else {

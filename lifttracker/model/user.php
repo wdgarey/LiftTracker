@@ -42,7 +42,7 @@ class User {
     $this->mEmail = $email;
   }
   public function setVital($vital) {
-    $this->vital = $vital;
+    $this->mVital = $vital;
   }
   public function setFirstName($firstName) {
     $this->mFirstName = $firstName;
@@ -70,7 +70,7 @@ class User {
     $this->setId($array["id"]);
     $this->setUsername($array["username"]);
     $this->setEmail($array["email"]);
-    $this->setVital($array["vital"]);
+    $this->setVital(boolval($array["vital"]));
     $this->setFirstName($array["firstname"]);
     $this->setLastName($array["lastname"]);
     $this->setHeight($array["height"]);

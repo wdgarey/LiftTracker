@@ -68,15 +68,15 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-                  <li><a href="#">Login/Sign-up</a></li>
-                  <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">User<span class="caret"></span></a>
-                      <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Profile</a></li>
-                          <li class="divider"></li>
-                          <li><a href="../main/index.php?controller=default&action=logout">Logout</a></li>
-                      </ul>
-                  </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo(htmlspecialchars(DefaultController::getInstance()->getUser()->getFirstName())); ?><span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="../main/index.php?controller=default&action=selfedit">Profile</a></li>
+                <li class="divider"></li>
+                <li><a href="../main/index.php?controller=default&action=logout">Logout</a></li>
+              </ul>
+            </li>
+            <li><a href="../main/index.php?controller=default&action=logout">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

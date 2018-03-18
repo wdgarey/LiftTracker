@@ -15,16 +15,17 @@ class PasswordValidator {
   private function __wakeup() {
   }
   public function validate($password, $passwordRetype) {
-    if ($password != null
-        && $password > 0) {
+    if (is_string($password)
+        && strlen($password) > 0) {
       if ($password == $passwordRetype) {
         $msgList = array();
       } else {
         $msgList[] = "The given password was not retyped correctly.";
       }
     } else {
-      $msgList = "The password must not be blank.";
+      $msgList[] = "The password and must not be blank.";
     }
+    return $msgList;
   }
 }
 ?>

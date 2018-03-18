@@ -22,7 +22,7 @@ class DefaultRepository extends Repository {
     $query = "SELECT *" 
       . " FROM lifttracker.enduser"
       . " WHERE username = :username"
-      . " AND password = Sha1(:password)"
+      . " AND pwd = Sha1(:password)"
       . ";";
     $stmt = $conn->prepare($query);
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
@@ -38,7 +38,7 @@ class DefaultRepository extends Repository {
   }
   public function createUser($user, $password) {
     $conn = $this->createConnection();
-    $query = "INSERT INTO liftracker.enduser (username, email, pwd, vital, firstname, lastname, height, weight)"
+    $query = "INSERT INTO lifttracker.enduser (username, email, pwd, vital, firstname, lastname, height, weight)"
       . " VALUES (:username, :email, Sha1(:password), :vital, :firstname, :lastname, :height, :weight)"
       . ";";
     $stmt = $conn->prepare($query);
@@ -46,7 +46,7 @@ class DefaultRepository extends Repository {
     $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
     $stmt->bindValue(':password', $password, PDO::PARAM_STR);
     $stmt->bindValue(':vital', $user->getVital(), PDO::PARAM_BOOL);
-    $stmt->bindValue(':fristname', $user->getFirstName(), PDO::PARAM_STR);
+    $stmt->bindValue(':firstname', $user->getFirstName(), PDO::PARAM_STR);
     $stmt->bindValue(':lastname', $user->getLastName(), PDO::PARAM_STR);
     $stmt->bindValue(':height', $user->getHeight(), PDO::PARAM_STR);
     $stmt->bindValue(':weight', $user->getWeight(), PDO::PARAM_STR);
@@ -92,11 +92,12 @@ class DefaultRepository extends Repository {
     if (count($users) > 0) {
       $isExisting = true;
     }
+    return $isExisting;
   }
   public function updatePassword($userId, $password) {
     $conn = $this->createConnection();
-    $query = "UPDATE liftracker.enduser "
-      . " SET password = Sha1(:password)"
+    $query = "UPDATE lifttracker.enduser "
+      . " SET pwd = Sha1(:password)"
       . " WHERE id = :userid"
       . ";";
     $stmt = $conn->prepare($query);
@@ -109,26 +110,22 @@ class DefaultRepository extends Repository {
   }
   public function updateUser($user) {
     $conn = $this->createConnection();
-    $query = "UPDATE liftracker.enduser"
-      . " SET username = :username, email = :email, pwd = Sha1(:password), vital = :vital, firstname = :firstname, lastname = :lastname, height = :height, weight = :weight"
+    $query = "UPDATE lifttracker.enduser"
+      . " SET username = :username, email = :email, vital = :vital, firstname = :firstname, lastname = :lastname, height = :height, weight = :weight"
       . " WHERE id = :userid"
       . ";";
     $stmt = $conn->prepare($query);
     $stmt->bindValue(':username', $user->getUsername(), PDO::PARAM_STR);
     $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
-    $stmt->bindValue(':password', $password, PDO::PARAM_STR);
     $stmt->bindValue(':vital', $user->getVital(), PDO::PARAM_BOOL);
-    $stmt->bindValue(':fristname', $user->getFirstName(), PDO::PARAM_STR);
+    $stmt->bindValue(':firstname', $user->getFirstName(), PDO::PARAM_STR);
     $stmt->bindValue(':lastname', $user->getLastName(), PDO::PARAM_STR);
     $stmt->bindValue(':height', $user->getHeight(), PDO::PARAM_STR);
     $stmt->bindValue(':weight', $user->getWeight(), PDO::PARAM_STR);
     $stmt->bindValue(':userid', $user->getId(), PDO::PARAM_INT);
     $stmt->execute();
     $lastId = $user->getId();
-    $user = null;
-    if ($stmt->rowCount() == 1) {
-      $user = $this->getUser($lastId);
-    }
+    $user = $this->getUser($lastId);
     $stmt->closeCursor();
     return $user;
   }

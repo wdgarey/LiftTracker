@@ -13,7 +13,7 @@
   <input type="password" placeholder="password" required name="password" class="form-control" value="<?php echo(htmlspecialchars($password)); ?>"/>
   <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 </form>
-<form class="form-signin" method="POST" action="../main/index.php?controller=default&action=signup">
+<form class="form-signin" method="POST" action="../main/index.php?controller=default&action=selfadd">
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
 </form>
 <?php

@@ -46,8 +46,8 @@ class DefaultController implements Controller {
     if (!$this->isLoggedIn()
         && $action != "login"
         && $action != "loginprocess"
-        && $action != "signup"
-        && $action != "signupprocess") {
+        && $action != "selfadd"
+        && $action != "selfaddeditprocess") {
       $url = "index.php?controller=default&action=login";
       Utils::redirect($url);
     } else {
@@ -61,11 +61,14 @@ class DefaultController implements Controller {
       case "logout":
         $this->logout();
         break;
-      case "signup":
-        $this->signupView();
+      case "selfadd":
+        $this->selfAdd();
         break;
-      case "signupprocess":
-        $this->signupProcess();
+      case "selfedit":
+        $this->selfedit();
+        break;
+      case "selfaddeditprocess":
+        $this->selfAddEditProcess();
         break;
       default:
         $this->home();
@@ -125,8 +128,21 @@ class DefaultController implements Controller {
   protected function setUser($user) {
     $_SESSION["user"] = $user;
   }
-  protected function signupView() {
-    $userName = "";
+  protected function selfedit() {
+    $user = $this->getUser();
+    $username = $user->getUsername();
+    $firstName = $user->getFirstName();
+    $lastName = $user->getLastName();
+    $height = $user->getHeight();
+    $weight = $user->getWeight();
+    $email = $user->getEmail();
+    $password = "";
+    $passwordRetype = "";
+
+    require("../view/selfaddedit.php");
+  }
+  protected function selfAdd() {
+    $username = "";
     $firstName = "";
     $lastName = "";
     $height = "";
@@ -135,10 +151,15 @@ class DefaultController implements Controller {
     $password = "";
     $passwordRetype = "";
 
+    if ($this->isLoggedIn()) {
+      Utils::redirect("index.php?controller=default&action=selfedit");
+    }
+
     require("../view/selfaddedit.php");
   }
-  protected function signupProcess() {
+  protected function selfAddEditProcess() {
     $user = null;
+    $msgList = array();
     $username = Utils::getArg("username");
     $firstName = Utils::getArg("firstname");
     $lastName = Utils::getArg("lastname");
@@ -154,6 +175,7 @@ class DefaultController implements Controller {
       $user = DefaultRepository::getInstance()->getUser($userId);
       if ($user == null) {
         $msgList[] = "User not found.";
+        Utils::redirect("index.php?controller=default&action=logout");
       } else {
         $user->setFirstName($firstName);
         $user->setLastName($lastName);
@@ -164,29 +186,30 @@ class DefaultController implements Controller {
     } else {
       //This is a create. 
       $user = new User();
-      $user->setUserId(0);
+      $user->setId(0);
       $user->setUsername($username);
       $user->setFirstName($firstName);
       $user->setLastName($lastName);
       $user->setHeight($height);
       $user->setWeight($weight);
       $user->setEmail($email);
-      $user->SetVital(false);
+      $user->setVital(false);
       //Make sure the username is not taken.
-      if (DefaultRepository::getInstance()->isExsitingUser($username)) {
+      if (DefaultRepository::getInstance()->isExistingUser($username)) {
         //The user name is taken.
         $msgList[] = "The username is already taken.";
       }
     }
-    $msgList = array_merge($msgList, UserValidator::getInstance()->validate($user));
+    if (count($msgList) == 0) {
+      $msgList = array_merge($msgList, UserValidator::getInstance()->validate($user));
+    }
     if (!$isLoggedIn
         || (isset($password)
             && strlen($password) > 0)) {
       $msgList = array_merge($msgList, PasswordValidator::getInstance()->validate($password, $passwordRetype));
     }
     //Check to see if there were any invalid inputs.
-    if (isset($msgList)
-        && count($msgList) > 0) {
+    if (count($msgList) > 0) {
       //There were invalid inputs.
       if ($isLoggedIn) {
         $msg = "Could not update account.";
@@ -197,20 +220,21 @@ class DefaultController implements Controller {
       //There were no invalid inputs.
       if ($isLoggedIn) {
         //Update account.
-        //View profile.
         $user = DefaultRepository::getInstance()->updateUser($user);
         if (isset($password)
             && strlen($password) > 0) {
-            DefaultRepository::getInstance()->updatePassword($user->getId(), $password);
+          DefaultRepository::getInstance()->updatePassword($user->getId(), $password);
         }
         $this->setUser($user);
-        Utils::redirect("index.php?controller=default&action=selfview");
+        $msg = "Profile updated successfully.";
+        //View profile.
+        Utils::redirect("index.php?controller=default&action=selfedit");
       } else {
         //Create account.
-        //Login.
-        //Home page.
         $user = DefaultRepository::getInstance()->createUser($user, $password);
+        //Login.
         $this->setUser($user);
+        //Home page.
         Utils::redirect("index.php?controller=default&action=home");
       }
     }
