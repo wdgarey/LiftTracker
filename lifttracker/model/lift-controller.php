@@ -1,19 +1,19 @@
 <?php
 require_once("controller.php");
 require_once("controller-registry.php");
-require_once("default-repository.php");
+require_once("lift-repository.php");
 require_once("password-validator.php");
 require_once("user.php");
 require_once("user-validator.php");
 require_once("utils.php");
 
-class DefaultController implements Controller {
+class LiftController implements Controller {
   private static $sInst;
   public static function getInstance() {
-    if (DefaultController::$sInst == null) {
-      DefaultController::$sInst = new DefaultController ();
+    if (LiftController::$sInst == null) {
+      LiftController::$sInst = new LiftController ();
     }
-    return DefaultController::$sInst;
+    return LiftController::$sInst;
   }
   private function __construct() {
   }
@@ -22,46 +22,40 @@ class DefaultController implements Controller {
   private function __wakeup() {
   }
   public function getName() {
-    return "default";
+    return "lift";
   }
   public function getUser() {
     $user = new User();
-    if (DefaultController::getInstance()->isLoggedIn()) {
+    if (LiftController::getInstance()->isLoggedIn()) {
       $user = $_SESSION["user"];
     }
     return $user;
   }
   public function handleRequest() {
     $action = Utils::getArg("action");
-    if (!$this->isLoggedIn()
-        && $action != "login"
-        && $action != "loginprocess"
-        && $action != "selfadd"
-        && $action != "selfprocessaddedit") {
+    if (!$this->isLoggedIn()) {
       $url = "index.php?controller=default&action=login";
       Utils::redirect($url);
     } else {
       switch ($action) {
-      case "login" :
-        $this->loginView();
+      case "liftadd" :
+        $this->liftAdd();
         break;
-      case "loginprocess":
-        $this->loginProcess();
+      case "liftedit":
+        $this->liftEdit();
         break;
-      case "logout":
-        $this->logout();
+      case "liftprocessaddedit":
+        $this->liftProcessAddEdit();
         break;
-      case "selfadd":
-        $this->selfAdd();
+      case "liftview":
+        $this->liftView();
         break;
-      case "selfedit":
-        $this->selfEdit();
-        break;
-      case "selfprocessaddedit":
-        $this->selfProcessAddEdit();
+      case "liftsview":
+        $this->liftsView();
         break;
       default:
-        $this->home();
+        $url = "index.php?controller=default";
+        Utils::redirect($url);
         break;
       }
     }
@@ -118,23 +112,7 @@ class DefaultController implements Controller {
   protected function setUser($user) {
     $_SESSION["user"] = $user;
   }
-  protected function selfAdd() {
-    $username = "";
-    $firstName = "";
-    $lastName = "";
-    $height = "";
-    $weight = "";
-    $email = "";
-    $password = "";
-    $passwordRetype = "";
-
-    if ($this->isLoggedIn()) {
-      Utils::redirect("index.php?controller=default&action=selfedit");
-    }
-
-    require("../view/selfaddedit.php");
-  }
-  protected function selfEdit() {
+  protected function selfedit() {
     $user = $this->getUser();
     $username = $user->getUsername();
     $firstName = $user->getFirstName();
@@ -147,7 +125,23 @@ class DefaultController implements Controller {
 
     require("../view/selfaddedit.php");
   }
-  protected function selfProcessAddEdit() {
+  protected function selfAdd() {
+    $username = "";
+    $firstName = "";
+    $lastName = "";
+    $height = "";
+    $weight = "";
+    $email = "";
+    $password = "";
+    $passwordRetype = "";
+
+    if ($this->isLoggedIn()) {
+      Utils::redirect("index.php?controller=lift&action=selfedit");
+    }
+
+    require("../view/selfaddedit.php");
+  }
+  protected function selfAddEditProcess() {
     $user = null;
     $msgList = array();
     $username = Utils::getArg("username");
@@ -165,7 +159,7 @@ class DefaultController implements Controller {
       $user = DefaultRepository::getInstance()->getUser($userId);
       if ($user == null) {
         $msgList[] = "User not found.";
-        Utils::redirect("index.php?controller=default&action=logout");
+        Utils::redirect("index.php?controller=lift&action=logout");
       } else {
         $user->setFirstName($firstName);
         $user->setLastName($lastName);
@@ -218,14 +212,14 @@ class DefaultController implements Controller {
         $this->setUser($user);
         $msg = "Profile updated successfully.";
         //View profile.
-        Utils::redirect("index.php?controller=default&action=selfedit");
+        Utils::redirect("index.php?controller=lift&action=selfedit");
       } else {
         //Create account.
         $user = DefaultRepository::getInstance()->createUser($user, $password);
         //Login.
         $this->setUser($user);
         //Home page.
-        Utils::redirect("index.php?controller=default&action=home");
+        Utils::redirect("index.php?controller=lift&action=home");
       }
     }
     $password = "";
@@ -234,8 +228,8 @@ class DefaultController implements Controller {
   }
 }
 
-if (!ControllerRegistry::getInstance()->isRegistered(DefaultController::getInstance()->getName())) {
-  ControllerRegistry::getInstance()->register(DefaultController::getInstance());
+if (!ControllerRegistry::getInstance()->isRegistered(LiftController::getInstance()->getName())) {
+  ControllerRegistry::getInstance()->register(LiftController::getInstance());
 }
 ?>
 

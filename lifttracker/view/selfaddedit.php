@@ -11,7 +11,7 @@
 <?php
   include("../includes/message.php");
 ?>
-      <form class="form-signin" method="POST" action="<?php echo("../main/index.php?controller=default&action=selfaddeditprocess"); ?>">
+      <form class="form-signin" method="POST" action="<?php echo("../main/index.php?controller=default&action=selfprocessaddedit"); ?>">
 <?php if (!DefaultController::getInstance()->isLoggedIn()) { ?>
         <label>Username</label>
         <input type="text" name="username" value="<?php echo(htmlspecialchars($username)); ?>" class="form-control" placeholder="Username" required autofocus />

@@ -2,13 +2,13 @@
 require_once("repository.php");
 require_once("user.php");
 
-class DefaultRepository extends Repository {
+class LiftRepository extends Repository {
   private static $sInst;
   public static function getInstance() {
-    if (DefaultRepository::$sInst == null) {
-      DefaultRepository::$sInst = new DefaultRepository ();
+    if (LiftRepository::$sInst == null) {
+      LiftRepository::$sInst = new LiftRepository ();
     }
-    return DefaultRepository::$sInst;
+    return LiftRepository::$sInst;
   }
   private function __construct() {
   }
