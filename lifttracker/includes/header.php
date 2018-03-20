@@ -24,7 +24,7 @@
 
     <title><?php echo($dTitle); ?></title>
 
-    <link rel="shortcut icon" href="../images/Ah_icon.ico" />
+    <link rel="shortcut icon" href="../images/ah_icon.ico" />
 
     <link rel="stylesheet" href="../css/stylesheet.css" />
     <link rel="stylesheet" href="../css/bootstrap.css" />

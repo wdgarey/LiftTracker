@@ -132,7 +132,7 @@ class DefaultController implements Controller {
       Utils::redirect("index.php?controller=default&action=selfedit");
     }
 
-    require("../view/selfaddedit.php");
+    require("../view/self-add-edit.php");
   }
   protected function selfEdit() {
     $user = $this->getUser();
@@ -145,7 +145,7 @@ class DefaultController implements Controller {
     $password = "";
     $passwordRetype = "";
 
-    require("../view/selfaddedit.php");
+    require("../view/self-add-edit.php");
   }
   protected function selfProcessAddEdit() {
     $user = null;
@@ -230,7 +230,7 @@ class DefaultController implements Controller {
     }
     $password = "";
     $passwordRetype = "";
-    require("../view/selfaddedit.php");
+    require("../view/self-add-edit.php");
   }
 }
 

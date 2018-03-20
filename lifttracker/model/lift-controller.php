@@ -24,13 +24,6 @@ class LiftController implements Controller {
   public function getName() {
     return "lift";
   }
-  public function getUser() {
-    $user = new User();
-    if (LiftController::getInstance()->isLoggedIn()) {
-      $user = $_SESSION["user"];
-    }
-    return $user;
-  }
   public function handleRequest() {
     $action = Utils::getArg("action");
     if (!$this->isLoggedIn()) {
@@ -60,57 +53,10 @@ class LiftController implements Controller {
       }
     }
   }
-  public function home() {
-    include("../view/home.php");
-  }
-  public function isLoggedIn() {
-    $isLoggedIn = (isset($_SESSION) && isset($_SESSION["user"]));
-    return $isLoggedIn;
-  }
-  protected function logout() {
-    if ($this->isLoggedIn()) {
-      unset($_SESSION["user"]);
-    }
-    Utils::redirect("../index.php");
-  }
-  protected function loginProcess() {
-    $msg = "";
-    if ($this->isLoggedIn ()) {
-      Utils::redirect("../index.php");
-    }
-    $username = Utils::getArg("username");
-    $password = Utils::getArg("password");
-    if ($username == null) {
-      $msg .= "No username given.";
-    }
-    if ($password == null) {
-      $msg .= "No password given.";
-    }
-    if (strlen($msg) == 0) {
-      $user = DefaultRepository::getInstance()->authenticate($username, $password);
-      if ($user == null) {
-        $msg = "Invalid username and/or password.";
-      } else {
-        $this->setUser($user);
-        Utils::redirect("../index.php");
-      }
-    }
-    $password = "";
-    require ("../view/login.php");
-  }
-  protected function loginView() {
-    if ($this->isLoggedIn ()) {
-      Utils::redirect("../index.php");
-    }
-    $username = Utils::getArg("username");
-    $password = "";
-    if ($username == null) {
-      $username = "";
-    }
-    require ("../view/login.php");
-  }
-  protected function setUser($user) {
-    $_SESSION["user"] = $user;
+  protected function liftAdd() {
+    $title = "";
+    $trainingWeight = "";
+    require ("../view/lift-add.php");
   }
   protected function selfedit() {
     $user = $this->getUser();
@@ -123,7 +69,7 @@ class LiftController implements Controller {
     $password = "";
     $passwordRetype = "";
 
-    require("../view/selfaddedit.php");
+    require("../view/lift-add-edit.php");
   }
   protected function selfAdd() {
     $username = "";
@@ -139,7 +85,7 @@ class LiftController implements Controller {
       Utils::redirect("index.php?controller=lift&action=selfedit");
     }
 
-    require("../view/selfaddedit.php");
+    require("../view/lift-add-edit.php");
   }
   protected function selfAddEditProcess() {
     $user = null;
@@ -224,7 +170,7 @@ class LiftController implements Controller {
     }
     $password = "";
     $passwordRetype = "";
-    require("../view/selfaddedit.php");
+    require("../view/lift-add-edit.php");
   }
 }
 
