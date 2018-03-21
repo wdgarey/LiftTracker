@@ -31,8 +31,11 @@ class LiftController implements Controller {
       Utils::redirect($url);
     } else {
       switch ($action) {
-      case "liftadd" :
+      case "liftadd":
         $this->liftAdd();
+        break;
+      case "liftdelete":
+        $this->liftDelete();
         break;
       case "liftedit":
         $this->liftEdit();
@@ -56,121 +59,107 @@ class LiftController implements Controller {
   protected function liftAdd() {
     $title = "";
     $trainingWeight = "";
-    require ("../view/lift-add.php");
+    require ("../view/lift-add-edit.php");
   }
-  protected function selfedit() {
-    $user = $this->getUser();
-    $username = $user->getUsername();
-    $firstName = $user->getFirstName();
-    $lastName = $user->getLastName();
-    $height = $user->getHeight();
-    $weight = $user->getWeight();
-    $email = $user->getEmail();
-    $password = "";
-    $passwordRetype = "";
-
-    require("../view/lift-add-edit.php");
-  }
-  protected function selfAdd() {
-    $username = "";
-    $firstName = "";
-    $lastName = "";
-    $height = "";
-    $weight = "";
-    $email = "";
-    $password = "";
-    $passwordRetype = "";
-
-    if ($this->isLoggedIn()) {
-      Utils::redirect("index.php?controller=lift&action=selfedit");
+  protected function liftDelete() {
+    $liftId = Utils::getArg("liftid");
+    $liftIds = Utils::getArg("liftids");
+    $user = DefaultController::getInstance()->getUser();
+    if ($liftid != null) {
+      LiftRepository::getInstance()->deleteLifts($user->getId(), array($liftId));
+    } else if ($liftIds != null) {
+      LiftRepository::getInstance()->deleteLifts($user->getId(), $lifIds);
+    } else {
+      $msg = "No lift ID given.";
     }
-
-    require("../view/lift-add-edit.php");
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
+    require ("../view/lifts-view.php");
   }
-  protected function selfAddEditProcess() {
-    $user = null;
-    $msgList = array();
-    $username = Utils::getArg("username");
-    $firstName = Utils::getArg("firstname");
-    $lastName = Utils::getArg("lastname");
-    $height = Utils::getArg("height");
-    $weight = Utils::getArg("weight");
-    $email = Utils::getArg("email");
-    $password = Utils::getArg("password");
-    $passwordRetype = Utils::getArg("passwordretype");
-    $isLoggedIn = $this->isLoggedIn();
-    //Check to see if this an update or a create.
-    if ($isLoggedIn) {
-      $userId = $this->getUser()->getId();
-      $user = DefaultRepository::getInstance()->getUser($userId);
-      if ($user == null) {
-        $msgList[] = "User not found.";
-        Utils::redirect("index.php?controller=lift&action=logout");
+  protected function liftEdit() {
+    // Get the lift, and then update the variables
+    $title = "";
+    $trainingWeight = "";
+    $liftId = Utils::getArg("liftid");
+    $user = DefaultController::getInstance()->getUser();
+    if ($liftId != null) {
+      $lift = LiftRepository::getInstance()->getLift($user->getId(), $liftId);
+      if ($lift != null) {
+        $title = $lift->getTitle();
+        $traningWeight = $lift->getTrainingWeight();
       } else {
-        $user->setFirstName($firstName);
-        $user->setLastName($lastName);
-        $user->setHeight($height);
-        $user->setWeight($weight);
-        $user->setEmail($email);
+        $msg = "Lift not found.";
       }
     } else {
-      //This is a create. 
-      $user = new User();
-      $user->setId(0);
-      $user->setUsername($username);
-      $user->setFirstName($firstName);
-      $user->setLastName($lastName);
-      $user->setHeight($height);
-      $user->setWeight($weight);
-      $user->setEmail($email);
-      $user->setVital(false);
-      //Make sure the username is not taken.
-      if (DefaultRepository::getInstance()->isExistingUser($username)) {
-        //The user name is taken.
-        $msgList[] = "The username is already taken.";
-      }
+      $msg = "No lift ID given.";
     }
+    require("../view/lift-add-edit.php");
+  }
+  protected function liftProcessAddEdit() {
+    $liftId = Utils::getArg("liftid");
+    $title = Utils::getArg("title");
+    $trainingWeight = Utils::getArg("trainingweight");
+    if ($liftId == null) { //Adding
+      if (LiftRepository::getInstance->isExistingLift($user->getId(), $title)) {
+        $msgList[] = "The lift, \"$title\", already exists."
+      } else {
+        $lift = new Lift();
+        $lift->setId(0);
+      }
+    } else { //Updating
+      $lift = LiftRepository::getInstance->getLift($user->getId(), $liftId);
+    }
+    $lift->setTitle($title);
+    $lift->setTrainingWeight($trainingWeight);
     if (count($msgList) == 0) {
-      $msgList = array_merge($msgList, UserValidator::getInstance()->validate($user));
+      $msgList = array_merge($msgList, LiftValidator::getInstance->validate($lift));
     }
-    if (!$isLoggedIn
-        || (isset($password)
-            && strlen($password) > 0)) {
-      $msgList = array_merge($msgList, PasswordValidator::getInstance()->validate($password, $passwordRetype));
-    }
-    //Check to see if there were any invalid inputs.
     if (count($msgList) > 0) {
-      //There were invalid inputs.
-      if ($isLoggedIn) {
-        $msg = "Could not update account.";
+      if ($liftId == null) {
+        $msg = "Could not add lift";
       } else {
-        $msg = "Could not create account.";
+        $msg = "Could not upate lift";
       }
     } else {
-      //There were no invalid inputs.
-      if ($isLoggedIn) {
-        //Update account.
-        $user = DefaultRepository::getInstance()->updateUser($user);
-        if (isset($password)
-            && strlen($password) > 0) {
-          DefaultRepository::getInstance()->updatePassword($user->getId(), $password);
+      if ($liftId == null) {
+        $liftId = LiftRepository::getInstance()->addLift($user->getId(), $lift);
+        if ($liftId == null) {
+          $msg = "Could not add lift - try again later";
+        } else {
+          Utils::redirect("index.php?controller=lift&action=liftview&liftid=$lift->getId()");
         }
-        $this->setUser($user);
-        $msg = "Profile updated successfully.";
-        //View profile.
-        Utils::redirect("index.php?controller=lift&action=selfedit");
       } else {
-        //Create account.
-        $user = DefaultRepository::getInstance()->createUser($user, $password);
-        //Login.
-        $this->setUser($user);
-        //Home page.
-        Utils::redirect("index.php?controller=lift&action=home");
+        $updatedLifts = LiftRepository::getInstance()->updateLift($user->getId(), $lift);
+        if (updatedLifts != 1) {
+          $msg = "Could not upate lift - try again later";
+        } else {
+          Utils::redirect("index.php?controller=lift&action=liftview&liftid=$lift->getId()");
+        }
       }
     }
-    $password = "";
-    $passwordRetype = "";
     require("../view/lift-add-edit.php");
+  }
+  public function liftView() {
+    $title = "";
+    $trainingWeight = "";
+    $liftId = Utils::getArg("liftid");
+    $user = DefaultController::getInstance()->getUser();
+    if ($liftId != null) {
+      $lift = LiftRepository::getInstance()->getLift($user->getId(), $liftId);
+      if ($lift != null) {
+        $title = $lift->getTitle();
+        $traningWeight = $lift->getTrainingWeight();
+      } else {
+        $msg = "Lift not found.";
+      }
+    } else {
+      $msg = "No lift ID given.";
+    }
+    require("../view/lift-view.php");
+  }
+  public function liftsView() {
+    $user = DefaultController::getInstance()->getUser();
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
+    require ("../view/lifts-view.php");
   }
 }
 
