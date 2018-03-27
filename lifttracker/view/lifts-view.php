@@ -23,6 +23,7 @@
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
@@ -33,6 +34,7 @@
             <td><a href="../main/index.php?controller=lift&action=liftview&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">View</a></td>
             <td><a href="../main/index.php?controller=lift&action=liftedit&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Edit</a></td>
             <td><a href="../main/index.php?controller=lift&action=liftdelete&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Delete</a></td>
+            <td><a href="../main/index.php?controller=attempt&action=attemptadd&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Add Attempt</a></td>
           </tr>
   <?php } ?>
         </tbody>

@@ -4,7 +4,6 @@ require_once("controller-registry.php");
 require_once("lift.php");
 require_once("lift-repository.php");
 require_once("lift-validator.php");
-require_once("password-validator.php");
 require_once("user.php");
 require_once("utils.php");
 
