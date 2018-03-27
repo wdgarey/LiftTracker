@@ -38,26 +38,26 @@ class LiftRepository extends Repository {
       return 0;
     }
     $conn = $this->createConnection();
-    $query = "DELETE FROM lifttracker.lift "
-      . " WHERE enduserid = :enduserid";
+    $query = "DELETE FROM lifttracker.lift"
+      . " WHERE enduserid = :enduserid"
       . " AND id IN (";
     $liftCount = 1;
     foreach ($liftIds as $liftId) {
-      if (liftCount == 1) {
-        $query .= ":liftid" . $liftCount
+      if ($liftCount == 1) {
+        $query .= ":liftid" . $liftCount;
       } else {
-        $query .= ", :liftid" . $liftCount
+        $query .= ", :liftid" . $liftCount;
       }
       $liftCount += 1;
     }
     $query .= ");";
+    $stmt = $conn->prepare($query);
     $stmt->bindValue(':enduserid', $userId, PDO::PARAM_INT);
     $liftCount = 1;
     foreach ($liftIds as $liftId) {
       $stmt->bindValue(':liftid' . $liftCount, $liftId, PDO::PARAM_INT);
       $liftCount += 1;
     }
-    $stmt = $conn->prepare($query);
     $stmt->execute();
     $rowCount = $stmt->rowCount();
     $stmt->closeCursor();
@@ -88,10 +88,10 @@ class LiftRepository extends Repository {
     $conn = $this->createConnection ();
     $query = "SELECT *" 
       . " FROM lifttracker.lift"
-      . " WHERE id = :userid"
+      . " WHERE enduserid = :enduserid"
       . ";";
     $stmt = $conn->prepare($query);
-    $stmt->bindValue(':userid', $userId, PDO::PARAM_INT);
+    $stmt->bindValue(':enduserid', $userId, PDO::PARAM_INT);
     $stmt->execute();
     $table = $stmt->fetchAll();
     foreach ($table as $row) {
@@ -123,16 +123,16 @@ class LiftRepository extends Repository {
   }
   public function updateLift($userId, $lift) {
     $conn = $this->createConnection();
-    $query = "UPDATE lifttracker.lift "
-      . " SET title = :title, trainingweight = :traningweight"
+    $query = "UPDATE lifttracker.lift"
+      . " SET title = :title, trainingweight = :trainingweight"
       . " WHERE id = :liftid"
       . " AND enduserid = :enduserid"
       . ";";
+    $stmt = $conn->prepare($query);
     $stmt->bindValue(':liftid', $lift->getId(), PDO::PARAM_INT);
     $stmt->bindValue(':enduserid', $userId, PDO::PARAM_INT);
     $stmt->bindValue(':title', $lift->getTitle(), PDO::PARAM_STR);
     $stmt->bindValue(':trainingweight', $lift->getTrainingWeight(), PDO::PARAM_STR);
-    $stmt = $conn->prepare($query);
     $stmt->execute();
     $rowCount = $stmt->rowCount();
     $stmt->closeCursor();

@@ -15,7 +15,7 @@ class LiftValidator {
   }
   private function __wakeup() {
   }
-  public function validate($user) {
+  public function validate($lift) {
     $msgList = array();
     $msgList = array_merge($msgList, $this->validateId($lift->getId()));
     $msgList = array_merge($msgList, $this->validateTitle($lift->getTitle()));

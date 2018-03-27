@@ -1,10 +1,11 @@
 <?php
 require_once("controller.php");
 require_once("controller-registry.php");
+require_once("lift.php");
 require_once("lift-repository.php");
+require_once("lift-validator.php");
 require_once("password-validator.php");
 require_once("user.php");
-require_once("user-validator.php");
 require_once("utils.php");
 
 class LiftController implements Controller {
@@ -26,33 +27,33 @@ class LiftController implements Controller {
   }
   public function handleRequest() {
     $action = Utils::getArg("action");
-    if (!$this->isLoggedIn()) {
+    if (!DefaultController::getInstance()->isLoggedIn()) {
       $url = "index.php?controller=default&action=login";
       Utils::redirect($url);
     } else {
       switch ($action) {
-      case "liftadd":
-        $this->liftAdd();
-        break;
-      case "liftdelete":
-        $this->liftDelete();
-        break;
-      case "liftedit":
-        $this->liftEdit();
-        break;
-      case "liftprocessaddedit":
-        $this->liftProcessAddEdit();
-        break;
-      case "liftview":
-        $this->liftView();
-        break;
-      case "liftsview":
-        $this->liftsView();
-        break;
-      default:
-        $url = "index.php?controller=default";
-        Utils::redirect($url);
-        break;
+        case "liftadd":
+          $this->liftAdd();
+          break;
+        case "liftdelete":
+          $this->liftDelete();
+          break;
+        case "liftedit":
+          $this->liftEdit();
+          break;
+        case "liftprocessaddedit":
+          $this->liftProcessAddEdit();
+          break;
+        case "liftview":
+          $this->liftView();
+          break;
+        case "liftsview":
+          $this->liftsView();
+          break;
+        default:
+          $url = "index.php?controller=default";
+          Utils::redirect($url);
+          break;
       }
     }
   }
@@ -65,7 +66,7 @@ class LiftController implements Controller {
     $liftId = Utils::getArg("liftid");
     $liftIds = Utils::getArg("liftids");
     $user = DefaultController::getInstance()->getUser();
-    if ($liftid != null) {
+    if ($liftId != null) {
       LiftRepository::getInstance()->deleteLifts($user->getId(), array($liftId));
     } else if ($liftIds != null) {
       LiftRepository::getInstance()->deleteLifts($user->getId(), $lifIds);
@@ -85,7 +86,7 @@ class LiftController implements Controller {
       $lift = LiftRepository::getInstance()->getLift($user->getId(), $liftId);
       if ($lift != null) {
         $title = $lift->getTitle();
-        $traningWeight = $lift->getTrainingWeight();
+        $trainingWeight = $lift->getTrainingWeight();
       } else {
         $msg = "Lift not found.";
       }
@@ -95,23 +96,25 @@ class LiftController implements Controller {
     require("../view/lift-add-edit.php");
   }
   protected function liftProcessAddEdit() {
+    $msgList = array();
     $liftId = Utils::getArg("liftid");
     $title = Utils::getArg("title");
     $trainingWeight = Utils::getArg("trainingweight");
+    $user = DefaultController::getInstance()->getUser();
     if ($liftId == null) { //Adding
-      if (LiftRepository::getInstance->isExistingLift($user->getId(), $title)) {
-        $msgList[] = "The lift, \"$title\", already exists."
+      if (LiftRepository::getInstance()->isExistingLift($user->getId(), $title)) {
+        $msgList[] = "The lift, \"$title\", already exists.";
       } else {
         $lift = new Lift();
         $lift->setId(0);
       }
     } else { //Updating
-      $lift = LiftRepository::getInstance->getLift($user->getId(), $liftId);
+      $lift = LiftRepository::getInstance()->getLift($user->getId(), $liftId);
     }
     $lift->setTitle($title);
     $lift->setTrainingWeight($trainingWeight);
     if (count($msgList) == 0) {
-      $msgList = array_merge($msgList, LiftValidator::getInstance->validate($lift));
+      $msgList = array_merge($msgList, LiftValidator::getInstance()->validate($lift));
     }
     if (count($msgList) > 0) {
       if ($liftId == null) {
@@ -122,18 +125,10 @@ class LiftController implements Controller {
     } else {
       if ($liftId == null) {
         $liftId = LiftRepository::getInstance()->addLift($user->getId(), $lift);
-        if ($liftId == null) {
-          $msg = "Could not add lift - try again later";
-        } else {
-          Utils::redirect("index.php?controller=lift&action=liftview&liftid=$lift->getId()");
-        }
+        Utils::redirect("index.php?controller=lift&action=liftview&liftid=" . $liftId);
       } else {
-        $updatedLifts = LiftRepository::getInstance()->updateLift($user->getId(), $lift);
-        if (updatedLifts != 1) {
-          $msg = "Could not upate lift - try again later";
-        } else {
-          Utils::redirect("index.php?controller=lift&action=liftview&liftid=$lift->getId()");
-        }
+        LiftRepository::getInstance()->updateLift($user->getId(), $lift);
+        Utils::redirect("index.php?controller=lift&action=liftview&liftid=" . $lift->getId());
       }
     }
     require("../view/lift-add-edit.php");
@@ -147,7 +142,7 @@ class LiftController implements Controller {
       $lift = LiftRepository::getInstance()->getLift($user->getId(), $liftId);
       if ($lift != null) {
         $title = $lift->getTitle();
-        $traningWeight = $lift->getTrainingWeight();
+        $trainingWeight = $lift->getTrainingWeight();
       } else {
         $msg = "Lift not found.";
       }

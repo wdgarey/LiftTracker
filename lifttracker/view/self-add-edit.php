@@ -5,8 +5,10 @@
 
 <?php if (DefaultController::getInstance()->isLoggedIn()) { ?>
       <h1>Edit Profile</h1>
+      <hr />
 <?php } else { ?>
       <h1>Create Account</h1>
+      <hr />
 <?php } ?>
 <?php
   include("../includes/message.php");

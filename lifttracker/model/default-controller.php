@@ -42,27 +42,27 @@ class DefaultController implements Controller {
       Utils::redirect($url);
     } else {
       switch ($action) {
-      case "login" :
-        $this->loginView();
-        break;
-      case "loginprocess":
-        $this->loginProcess();
-        break;
-      case "logout":
-        $this->logout();
-        break;
-      case "selfadd":
-        $this->selfAdd();
-        break;
-      case "selfedit":
-        $this->selfEdit();
-        break;
-      case "selfprocessaddedit":
-        $this->selfProcessAddEdit();
-        break;
-      default:
-        $this->home();
-        break;
+        case "login" :
+          $this->loginView();
+          break;
+        case "loginprocess":
+          $this->loginProcess();
+          break;
+        case "logout":
+          $this->logout();
+          break;
+        case "selfadd":
+          $this->selfAdd();
+          break;
+        case "selfedit":
+          $this->selfEdit();
+          break;
+        case "selfprocessaddedit":
+          $this->selfProcessAddEdit();
+          break;
+        default:
+          $this->home();
+          break;
       }
     }
   }

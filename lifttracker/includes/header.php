@@ -30,10 +30,8 @@
     <link rel="stylesheet" href="../css/bootstrap.css" />
         
     <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="../js/javascript.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type="text/javascript" src="../js/bootstrap.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-confirmation.min.js"></script>
   </head>
   <body>
     <?php if (DefaultController::getInstance()->isLoggedIn ()) { ?>
@@ -52,14 +50,11 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Lifts<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <li><a href="../main/index.php?controller=lift&action=liftadd">Add Lift</a></li>
+                <li><a href="../main/index.php?controller=lift&action=liftsview">View Lifts</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
@@ -71,6 +66,7 @@
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo(htmlspecialchars(DefaultController::getInstance()->getUser()->getFirstName())); ?><span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
+                <li><a href="../main/index.php?controller=lift&action=liftsview">Lifts</a></li>
                 <li><a href="../main/index.php?controller=default&action=selfedit">Profile</a></li>
                 <li class="divider"></li>
                 <li><a href="../main/index.php?controller=default&action=logout">Logout</a></li>

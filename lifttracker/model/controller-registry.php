@@ -2,46 +2,36 @@
 require_once("controller.php");
 
 class ControllerRegistry {
-  private static $sInst = null;
+  private static $sRegistry = array();
   public static function getInstance() {
-    if (ControllerRegistry::$sInst == null) {
-      ControllerRegistry::$sInst = new ControllerRegistry();
+    static $inst = null;
+    if ($inst == null) {
+      $inst = new ControllerRegistry();
     }
-    return ControllerRegistry::$sInst;
-  }
-  private $mRegistry;
-  protected function getRegistry() {
-    return $this->mRegistry;
-  }
-  protected function setRegistry($registry) {
-    $this->mRegistry = $registry;
+    return $inst;
   }
   private function __construct() {
-    $this->mRegistry = array();
   }
   private function __clone() {
   }
   private function __wakeup() {
   }
   public function isRegistered($name) {
-    $registry = $this->getRegistry ();
-    $registered = array_key_exists($name, $registry);
+    $registered = array_key_exists($name, ControllerRegistry::$sRegistry);
     return $registered;
   }
   public function register($controller) {
-    $name = $controller->getName ();
-    $registry = $this->getRegistry ();
+    $name = $controller->getName();
     if ($this->isRegistered($name)) {
       throw new Exception("The controller '$name' is already registered.");
     } else {
-      $registry[$name] = $controller;
+      ControllerRegistry::$sRegistry[$name] = $controller;
     }
   }
   public function get($name) {
     $controller = null;
     if ($this->isRegistered($name)) {
-      $registry = $this->getRegistry ();
-      $controller = $registry[$name];
+      $controller = ControllerRegistry::$sRegistry[$name];
     }
     return $controller;
   }
