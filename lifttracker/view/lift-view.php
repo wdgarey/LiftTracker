@@ -1,6 +1,7 @@
 <?php
   require_once("../includes/header.php");
 ?>
+    <div class="container">
       <h1>View Lift</h1>
       <hr />
 <?php
@@ -28,8 +29,12 @@
             <input type="hidden" name="liftid" value="<?php echo(htmlspecialchars($liftId)); ?>" class="form-control" />
             <button class="col-sm-2 btn btn-primary pull-right" type="submit">Edit</button>
           </form>
+          <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftsview"); ?>">
+            <button class="col-sm-2 btn btn-primary pull-right" type="submit">Lifts</button>
+          </form>
         </div>
       </div>
+    </div>
 <?php
   require_once("../includes/footer.php");
 ?>

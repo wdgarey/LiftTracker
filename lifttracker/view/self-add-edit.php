@@ -3,6 +3,7 @@
   require_once("../includes/header.php");
 ?>
 
+    <div class="container">
 <?php if (DefaultController::getInstance()->isLoggedIn()) { ?>
       <h1>Edit Profile</h1>
       <hr />
@@ -76,6 +77,7 @@
           </div>
         </div>
       </form>
+    </div>
 <?php
   require_once("../includes/footer.php");
 ?>

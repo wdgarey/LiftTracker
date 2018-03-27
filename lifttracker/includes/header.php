@@ -3,13 +3,11 @@
   <head>
     <?php
       require_once("../model/default-controller.php");
-
       if (!isset($dCharset)) { $dCharset = "UTF-8"; }
       if (!isset($dDescription)) { $dDescription = "A web app used for lifting."; }
       if (!isset($dTags) || !is_array($dTags)) { $dTags = array("lift", "tracker", "lifttracker"); }
       if (!isset($dAuthor)) { $dAuthor = "Wesley Garey"; }
       if (!isset($dTitle)) { $dTitle = "Lift Tracker"; }
-
       $tags = "";
       foreach ($dTags as $tag) {
         $tags .= $tag . " ";
@@ -21,14 +19,10 @@
     <meta name="description" content="<?php echo($dDescription); ?>" />
     <meta name="keywords" content="<?php echo($tags); ?>" />
     <meta name="author" content="<?php echo($dAuthor); ?>" />
-
     <title><?php echo($dTitle); ?></title>
-
     <link rel="shortcut icon" href="../images/ah_icon.ico" />
-
     <link rel="stylesheet" href="../css/stylesheet.css" />
     <link rel="stylesheet" href="../css/bootstrap.css" />
-        
     <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.js"></script>
     <script type="text/javascript" src="../js/bootstrap-confirmation.min.js"></script>
@@ -78,5 +72,4 @@
       </div>
     </nav>
     <?php } ?>
-    <div class="container">
-<!-- Begin content here -->             
+

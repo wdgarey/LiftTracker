@@ -1,7 +1,7 @@
 <?php
   require_once("../includes/header.php");
 ?>
-
+    <div class="container">
 <?php if (isset($liftId)) { ?>
       <h1>Edit Lift</h1>
       <hr />
@@ -40,6 +40,7 @@
           </div>
         </div>
       </form>
+    </div>
 <?php
   require_once("../includes/footer.php");
 ?>
