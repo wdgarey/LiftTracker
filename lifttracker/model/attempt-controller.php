@@ -66,6 +66,7 @@ class AttemptController implements Controller {
     require ("../view/attempt-add-edit.php");
   }
   protected function attemptDelete() {
+    $liftTitles = array();
     $attemptId = Utils::getArg("attemptid");
     $attemptIds = Utils::getArg("attemptids");
     $user = DefaultController::getInstance()->getUser();
@@ -77,6 +78,11 @@ class AttemptController implements Controller {
       $msg = "No attempt ID given.";
     }
     $attempts = AttemptRepository::getInstance()->getAttemptsUser($user->getId());
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
+    foreach ($lifts as $lift) {
+      $liftId = $lift->getId();
+      $liftTitles["$liftId"] = $lift->getTitle();
+    }
     require ("../view/attempts-view.php");
   }
   protected function attemptEdit() {

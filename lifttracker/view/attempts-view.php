@@ -21,7 +21,6 @@
             <th scope="col"><a href="#">Lift</a></th>
             <th scope="col"><a href="#">Weight</a></th>
             <th scope="col"><a href="#">Reps</a></th>
-            <th scope="col"><a href="#">Occurrence</a></th>
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
@@ -34,10 +33,9 @@
             <td><a href="../main/index.php?controller=lift&action=liftview&liftid=<?php echo(htmlspecialchars($liftId)); ?>"><?php echo(htmlspecialchars($liftTitles["$liftId"])); ?></a></td>
             <td><?php echo(htmlspecialchars($attempt->getWeight())); ?></td>
             <td><?php echo(htmlspecialchars($attempt->getReps())); ?></td>
-            <td><?php echo(htmlspecialchars(Utils::toDisplayDate($attempt->getOccurrence()))); ?></td>
-            <td><a href="../main/index.php?controller=lift&action=liftview&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">View</a></td>
-            <td><a href="../main/index.php?controller=lift&action=liftedit&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Edit</a></td>
-            <td><a href="../main/index.php?controller=lift&action=liftdelete&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Delete</a></td>
+            <td><a href="../main/index.php?controller=attempt&action=attemptview&attemptid=<?php echo(htmlspecialchars($attempt->getId())); ?>"><img src="../images/view.png" alt="View" /></a></td>
+            <td><a href="../main/index.php?controller=attempt&action=attemptedit&attemptid=<?php echo(htmlspecialchars($attempt->getId())); ?>"><img src="../images/edit.png" alt="Edit" /></a></td>
+            <td><a data-toggle="confirmation" href="../main/index.php?controller=attempt&action=attemptdelete&attemptid=<?php echo(htmlspecialchars($attempt->getId())); ?>"><img src="../images/delete.png" alt="Delete" /></a></td>
           </tr>
   <?php } ?>
         </tbody>

@@ -29,6 +29,9 @@
             <input type="hidden" name="liftid" value="<?php echo(htmlspecialchars($liftId)); ?>" class="form-control" />
             <button class="col-sm-2 btn btn-primary pull-right" type="submit">Edit</button>
           </form>
+          <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftadd"); ?>">
+            <button class="col-sm-2 btn btn-primary pull-right" type="submit">Add New</button>
+          </form>
           <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftsview"); ?>">
             <button class="col-sm-2 btn btn-primary pull-right" type="submit">Lifts</button>
           </form>
@@ -62,9 +65,9 @@
             <td><?php echo(htmlspecialchars($attempt->getWeight())); ?></td>
             <td><?php echo(htmlspecialchars($attempt->getReps())); ?></td>
             <td><?php echo(htmlspecialchars(Utils::toDisplayDate($attempt->getOccurrence()))); ?></td>
-            <td><a href="../main/index.php?controller=lift&action=liftview&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">View</a></td>
-            <td><a href="../main/index.php?controller=lift&action=liftedit&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Edit</a></td>
-            <td><a href="../main/index.php?controller=lift&action=liftdelete&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Delete</a></td>
+            <td><a href="../main/index.php?controller=attempt&action=attemptview&attemptid=<?php echo(htmlspecialchars($attempt->getId())); ?>"><img src="../images/view.png" alt="View" /></a></td>
+            <td><a href="../main/index.php?controller=attempt&action=attemptedit&attemptid=<?php echo(htmlspecialchars($attempt->getId())); ?>"><img src="../images/edit.png" alt="Edit" /></a></td>
+            <td><a data-toggle="confirmation" href="../main/index.php?controller=attempt&action=attemptdelete&attemptid=<?php echo(htmlspecialchars($attempt->getId())); ?>"><img src="../images/delete.png" alt="Delete" /></a></td>
           </tr>
   <?php } ?>
         </tbody>

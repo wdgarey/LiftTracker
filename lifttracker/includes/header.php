@@ -45,30 +45,16 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="../main/index.php">Home</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Lifts<span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="../main/index.php?controller=lift&action=liftsview">View Lifts</a></li>
-                <li class="divider"></li>
-                <li><a href="../main/index.php?controller=lift&action=liftadd">Add Lift</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Attempts<span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="../main/index.php?controller=attempt&action=attemptsview">View Attempts</a></li>
-                <li class="divider"></li>
-                <li><a href="../main/index.php?controller=attempt&action=attemptadd">Add Attempts</a></li>
-              </ul>
-            </li>
+            <li><a href="../main/index.php?controller=lift&action=liftsview">Lifts</a></li>
+            <li><a href="../main/index.php?controller=attempt&action=attemptsview">Attempts</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo(htmlspecialchars(DefaultController::getInstance()->getUser()->getFirstName())); ?><span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
+                <li><a href="../main/index.php?controller=default&action=selfedit">Profile</a></li>
                 <li><a href="../main/index.php?controller=lift&action=liftsview">Lifts</a></li>
                 <li><a href="../main/index.php?controller=attempt&action=attemptsview">Attempts</a></li>
-                <li><a href="../main/index.php?controller=default&action=selfedit">Profile</a></li>
                 <li class="divider"></li>
                 <li><a href="../main/index.php?controller=default&action=logout">Logout</a></li>
               </ul>
