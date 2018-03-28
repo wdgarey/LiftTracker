@@ -1,7 +1,5 @@
 <?php
 class Utils {
-  public const VALID_EMAIL_PATTERN = "/^[^@]*@[^@]*\.[^@]*$/";
-  public const VALID_PHONE_PATTERN = "/^[0-9]{10}$/";
   public static function adjustQuotes() {
     if (get_magic_quotes_gpc() == true) {
       array_walk_recursive($_GET, array('Utils', 'stripSlashes_Gpc'));
@@ -28,11 +26,10 @@ class Utils {
     exit();
   }
   public static function secureConnection() {
-    Utils::unsecureConnection();
-    //if (!isset($_SERVER['HTTPS'])) {
-      //$url = 'https://' . $_SERVER['HTTP_HOST'] . Utils::getRequestedUri();
-      //Utils::redirect($url);
-    //}
+    if (!isset($_SERVER['HTTPS'])) {
+      $url = 'https://' . $_SERVER['HTTP_HOST'] . Utils::getRequestedUri();
+      Utils::redirect($url);
+    }
   }
   public static function startSession() {
     if (!isset($_SESSION)) {
