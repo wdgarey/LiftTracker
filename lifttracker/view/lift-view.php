@@ -34,7 +34,49 @@
           </form>
         </div>
       </div>
+<?php if (count($attempts) == 0) { ?>
+      <h2>No attempts yet? Add one <a href="../main/index.php?controller=attempt&action=attemptadd&liftid=<?php echo(htmlspecialchars($liftId)); ?>">here</a>.</h2>
+<?php } else {?>
+      <h2>Attempts</h2>
+      <hr />
+      <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptadd&liftid=" . htmlspecialchars($liftId)); ?>">
+        <div class="form-group row">
+          <button class="col-sm-1 btn btn-primary" type="submit">Add Attempt</button>
+        </div>
+      </form>
+      <table id="table" class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col"><a href="#">Weight</a></th>
+            <th scope="col"><a href="#">Reps</a></th>
+            <th scope="col"><a href="#">Occurrence</a></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+  <?php foreach ($attempts as $attempt) { ?>
+    <?php $liftId = $attempt->getLiftId (); ?>
+          <tr>
+            <td><?php echo(htmlspecialchars($attempt->getWeight())); ?></td>
+            <td><?php echo(htmlspecialchars($attempt->getReps())); ?></td>
+            <td><?php echo(htmlspecialchars(Utils::toDisplayDate($attempt->getOccurrence()))); ?></td>
+            <td><a href="../main/index.php?controller=lift&action=liftview&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">View</a></td>
+            <td><a href="../main/index.php?controller=lift&action=liftedit&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Edit</a></td>
+            <td><a href="../main/index.php?controller=lift&action=liftdelete&liftid=<?php echo(htmlspecialchars($lift->getId())); ?>">Delete</a></td>
+          </tr>
+  <?php } ?>
+        </tbody>
+      </table>
+<?php } ?>
     </div>
+    <script>
+      $(document).ready(function() {
+          $("#table").tablesorter();
+        }
+      );
+    </script>
 <?php
   require_once("../includes/footer.php");
 ?>

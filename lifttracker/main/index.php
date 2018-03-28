@@ -1,4 +1,5 @@
 <?php
+require_once("../model/attempt-controller.php");
 require_once("../model/controller-registry.php");
 require_once("../model/default-controller.php");
 require_once("../model/lift-controller.php");

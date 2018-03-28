@@ -68,7 +68,7 @@ class LiftController implements Controller {
     if ($liftId != null) {
       LiftRepository::getInstance()->deleteLifts($user->getId(), array($liftId));
     } else if ($liftIds != null) {
-      LiftRepository::getInstance()->deleteLifts($user->getId(), $lifIds);
+      LiftRepository::getInstance()->deleteLifts($user->getId(), $liftIds);
     } else {
       $msg = "No lift ID given.";
     }
@@ -134,6 +134,7 @@ class LiftController implements Controller {
   }
   public function liftView() {
     $title = "";
+    $attempts = array();
     $trainingWeight = "";
     $liftId = Utils::getArg("liftid");
     $user = DefaultController::getInstance()->getUser();
@@ -142,6 +143,8 @@ class LiftController implements Controller {
       if ($lift != null) {
         $title = $lift->getTitle();
         $trainingWeight = $lift->getTrainingWeight();
+        $attempts = AttemptRepository::getInstance()->getAttemptsLift($user->getId(), $liftId);
+        $liftTitles["$liftId"] = $title;
       } else {
         $msg = "Lift not found.";
       }

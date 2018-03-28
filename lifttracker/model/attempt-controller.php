@@ -58,11 +58,11 @@ class AttemptController implements Controller {
   }
   protected function attemptAdd() {
     $liftId = Utils::getArg("liftid");
-    $occurrence = "";
+    $occurrence = date("Y-m-d");
     $weight = "";
     $reps = "";
     $user = DefaultController::getInstance()->getUser();
-    $lifts = LiftController::getInstance()->getLifts($user->getId());
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
     require ("../view/attempt-add-edit.php");
   }
   protected function attemptDelete() {
@@ -72,11 +72,11 @@ class AttemptController implements Controller {
     if ($attemptId != null) {
       AttemptRepository::getInstance()->deleteAttempts($user->getId(), array($attemptId));
     } else if ($attemptIds != null) {
-      AttemptRepository::getInstance()->deleteAttempts($user->getId(), $lifIds);
+      AttemptRepository::getInstance()->deleteAttempts($user->getId(), $attemptIds);
     } else {
       $msg = "No attempt ID given.";
     }
-    $attempts = AttemptRepository::getInstance()->getAttempts($user->getId());
+    $attempts = AttemptRepository::getInstance()->getAttemptsUser($user->getId());
     require ("../view/attempts-view.php");
   }
   protected function attemptEdit() {
@@ -86,12 +86,12 @@ class AttemptController implements Controller {
     $reps = "";
     $attemptId = Utils::getArg("attemptid");
     $user = DefaultController::getInstance()->getUser();
-    $lifts = LiftController::getInstance()->getLifts($user->getId());
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
     if ($attemptId != null) {
       $attempt = AttemptRepository::getInstance()->getAttempt($user->getId(), $attemptId);
       if ($attempt != null) {
         $liftId = $attempt->getLiftId();
-        $occurrence = $attempt->getOccurence();
+        $occurrence = $attempt->getOccurrence();
         $weight = $attempt->getWeight();
         $reps = $attempt->getReps();
       } else {
@@ -110,7 +110,7 @@ class AttemptController implements Controller {
     $weight = Utils::getArg("weight");
     $reps = Utils::getArg("reps");
     $user = DefaultController::getInstance()->getUser();
-    $lifts = LiftController::getInstance()->getLifts($user->getId());
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
     if ($attemptId == null) { //Adding
       $attempt = new Attempt();
       $attempt->setId(0);
@@ -122,12 +122,12 @@ class AttemptController implements Controller {
     }
     if ($liftId == null) {
       $msgList[] = "No lift ID given.";
-    } else if (LiftController::getInstance()->getLift($user->getId(), $liftId) == null) {
+    } else if (LiftRepository::getInstance()->getLift($user->getId(), $liftId) == null) {
       $msgList[] = "The lift does not exist.";
     }
     if (count($msgList) == 0) {
       $attempt->setLiftId($liftId);
-      $attempt->setOccurence($occurrence);
+      $attempt->setOccurrence($occurrence);
       $attempt->setWeight($weight);
       $attempt->setReps($reps);
       $msgList = array_merge($msgList, AttemptValidator::getInstance()->validate($attempt));
@@ -140,7 +140,7 @@ class AttemptController implements Controller {
       }
     } else {
       if ($attemptId == null) {
-        $attemptId = AttemptRepository::getInstance()->addAttempt($user->getId(), $attempt);
+        $attemptId = AttemptRepository::getInstance()->addAttempt($attempt);
         Utils::redirect("index.php?controller=attempt&action=attemptview&attemptid=" . $attemptId);
       } else {
         AttemptRepository::getInstance()->updateAttempt($user->getId(), $attempt);
@@ -161,7 +161,7 @@ class AttemptController implements Controller {
       $attempt = AttemptRepository::getInstance()->getAttempt($user->getId(), $attemptId);
       if ($attempt != null) {
         $liftId = $attempt->getLiftId();
-        $lift = LiftController::getInstance()->getLift($user->getId(), $liftId);
+        $lift = LiftRepository::getInstance()->getLift($user->getId(), $liftId);
         if ($lift == null) {
           $msg = "The associated lift was not found.";
         } else {
@@ -180,8 +180,14 @@ class AttemptController implements Controller {
     require("../view/attempt-view.php");
   }
   public function attemptsView() {
+    $liftTitles = array();
     $user = DefaultController::getInstance()->getUser();
-    $attempts = AttemptRepository::getInstance()->getAttempts($user->getId());
+    $attempts = AttemptRepository::getInstance()->getAttemptsUser($user->getId());
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
+    foreach ($lifts as $lift) {
+      $liftId = $lift->getId();
+      $liftTitles["$liftId"] = $lift->getTitle();
+    }
     require ("../view/attempts-view.php");
   }
 }

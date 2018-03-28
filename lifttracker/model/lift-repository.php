@@ -38,9 +38,10 @@ class LiftRepository extends Repository {
       return 0;
     }
     $conn = $this->createConnection();
-    $query = "DELETE FROM lifttracker.lift"
+    $query = "DELETE"
+      . " FROM lifttracker.lift"
       . " WHERE enduserid = :enduserid"
-      . " AND id IN (";
+      . "   AND id IN (";
     $liftCount = 1;
     foreach ($liftIds as $liftId) {
       if ($liftCount == 1) {
@@ -69,7 +70,7 @@ class LiftRepository extends Repository {
     $query = "SELECT *" 
       . " FROM lifttracker.lift"
       . " WHERE id = :liftid"
-      . " AND enduserid = :enduserid"
+      . "   AND enduserid = :enduserid"
       . ";";
     $stmt = $conn->prepare($query);
     $stmt->bindValue(':liftid', $liftId, PDO::PARAM_INT);
@@ -108,7 +109,7 @@ class LiftRepository extends Repository {
     $query = "SELECT *" 
       . " FROM lifttracker.lift"
       . " WHERE enduserid = :enduserid"
-      . " AND title = :title"
+      . "   AND title = :title"
       . ";";
     $stmt = $conn->prepare($query);
     $stmt->bindValue(':enduserid', $userId, PDO::PARAM_INT);
@@ -126,7 +127,7 @@ class LiftRepository extends Repository {
     $query = "UPDATE lifttracker.lift"
       . " SET title = :title, trainingweight = :trainingweight"
       . " WHERE id = :liftid"
-      . " AND enduserid = :enduserid"
+      . "   AND enduserid = :enduserid"
       . ";";
     $stmt = $conn->prepare($query);
     $stmt->bindValue(':liftid', $lift->getId(), PDO::PARAM_INT);
