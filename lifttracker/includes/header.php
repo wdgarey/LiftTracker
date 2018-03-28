@@ -44,7 +44,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="../main/index.php">Home</a></li>
+            <li><a href="../main/index.php">Home</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Lifts<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
@@ -67,7 +67,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo(htmlspecialchars(DefaultController::getInstance()->getUser()->getFirstName())); ?><span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="../main/index.php?controller=lift&action=liftsview">Lifts</a></li>
-                <li><a href="../main/index.php?controller=attempt&action=attemptssview">Attempts</a></li>
+                <li><a href="../main/index.php?controller=attempt&action=attemptsview">Attempts</a></li>
                 <li><a href="../main/index.php?controller=default&action=selfedit">Profile</a></li>
                 <li class="divider"></li>
                 <li><a href="../main/index.php?controller=default&action=logout">Logout</a></li>
