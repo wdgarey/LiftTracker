@@ -130,7 +130,7 @@ CREATE TABLE liftrec
 (
   id INT AUTO_INCREMENT,
   liftid INT NOT NULL,
-  occurence DATE NOT NULL,
+  occurrence DATE NOT NULL,
   weight NUMERIC(6, 2) NOT NULL DEFAULT 0.0,
   reps INT NOT NULL DEFAULT 0,
   CONSTRAINT liftrec_pk PRIMARY KEY (id),
