@@ -3,10 +3,10 @@
 ?>
     <div class="container">
 <?php if (isset($attemptId)) { ?>
-      <h1>Edit Lift</h1>
+      <h1>Edit Attempt</h1>
       <hr />
 <?php } else { ?>
-      <h1>Add Lift</h1>
+      <h1>Add Attempt</h1>
       <hr />
 <?php } ?>
 <?php
