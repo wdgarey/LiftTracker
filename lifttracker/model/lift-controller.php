@@ -49,6 +49,12 @@ class LiftController implements Controller {
         case "liftsview":
           $this->liftsView();
           break;
+        case "liftsedit":
+          $this->liftsEdit();
+          break;
+        case "liftsprocessedit":
+          $this->liftsProcessEdit();
+          break;
         default:
           $url = "index.php?controller=default";
           Utils::redirect($url);
@@ -157,6 +163,54 @@ class LiftController implements Controller {
     $user = DefaultController::getInstance()->getUser();
     $lifts = LiftRepository::getInstance()->getLifts($user->getId());
     require ("../view/lifts-view.php");
+  }
+  public function liftsEdit() {
+    $user = DefaultController::getInstance()->getUser();
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
+    require ("../view/lifts-edit.php");
+  }
+  public function liftsProcessEdit() {
+    $msgList = array();
+    $addVal = Utils::getArg("addval");
+    $multiplyVal = Utils::getArg("multiplyval");
+    $subtractVal = Utils::getArg("subtractval");
+    $user = DefaultController::getInstance()->getUser();
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
+    foreach ($lifts as $lift) {
+      if (Utils::getArg("lift" . $lift->getId()) != null) {
+        if (Utils::getArg("add") != null) {
+          $lift->setTrainingWeight($lift->getTrainingWeight() + $addVal);
+          $msgList = array_merge($msgList, LiftValidator::getInstance()->validate($lift));
+          if (count($msgList) > 0) {
+            break;
+          }
+          LiftRepository::getInstance()->updateLift($user->getId(), $lift);
+        } else if (Utils::getArg("subtract") != null) {
+          $lift->setTrainingWeight($lift->getTrainingWeight() - $subtractVal);
+          $msgList = array_merge($msgList, LiftValidator::getInstance()->validate($lift));
+          if (count($msgList) > 0) {
+            break;
+          }
+          LiftRepository::getInstance()->updateLift($user->getId(), $lift);
+        } else if (Utils::getArg("multiply") != null) {
+          $lift->setTrainingWeight($lift->getTrainingWeight() * $multiplyVal);
+          $msgList = array_merge($msgList, LiftValidator::getInstance()->validate($lift));
+          if (count($msgList) > 0) {
+            break;
+          }
+          LiftRepository::getInstance()->updateLift($user->getId(), $lift);
+        } else {
+          $msgList = "No action given";
+          break;
+        }
+      }
+    }
+    if (count($msgList) > 0) {
+      $msg = "Could not update lifts";
+    } else {
+      Utils::redirect("index.php?controller=lift&action=liftsedit");
+    }
+    require ("../view/lifts-edit.php");
   }
 }
 

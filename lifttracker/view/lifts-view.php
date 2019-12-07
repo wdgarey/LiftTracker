@@ -10,11 +10,18 @@
 <?php if (count($lifts) == 0) { ?>
       <h2>No lifts yet? Add one <a href="../main/index.php?controller=lift&action=liftadd">here</a>.</h2>
 <?php } else {?>
-      <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftadd"); ?>">
-        <div class="form-group row">
-          <button class="col-sm-1 btn btn-primary" type="submit">Add Lift</button>
+      <div class="form-group row">
+        <div class="col-sm-1">
+          <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftadd"); ?>">
+            <button class="btn btn-primary" type="submit">Add Lift</button>
+          </form>
         </div>
-      </form>
+        <div class="col-sm-1">
+          <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftsedit"); ?>">
+            <button class="btn btn-primary" type="submit">Edit Lifts</button>
+          </form>
+        </div>
+      </div>
       <table id="table" class="table table-striped">
         <thead>
           <tr>
