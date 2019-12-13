@@ -95,18 +95,6 @@ INSERT INTO rolefunc (roleid, funcid) VALUES
   (1, 9),
   (1, 10);
 
-CREATE TABLE liftgrp
-(
-  id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  enduserid INT NOT NULL,
-  title VARCHAR(32) NOT NULL UNIQUE,
-  autoupdate tinyint(1) DEFAULT FALSE,
-  autoupdatedate DATE,
-  autoupdateincrement NUMERIC(4, 2) DEFAULT 0.0,
-  CONSTRAINT liftgrp_pk PRIMARY KEY(enduserid, title),
-  CONSTRAINT liftgrp_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
-
 CREATE TABLE lift
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
@@ -115,15 +103,6 @@ CREATE TABLE lift
   trainingweight NUMERIC(6, 2) NOT NULL DEFAULT 0.0,
   CONSTRAINT lift_pk PRIMARY KEY(title),
   CONSTRAINT lift_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
-
-CREATE TABLE liftgrplift
-(
-  liftgrpid INT NOT NULL,
-  liftid INT NOT NULL,
-  CONSTRAINT liftgrplift_pk PRIMARY KEY (liftgrpid, liftid),
-  CONSTRAINT liftgrplift_liftgrp_fk FOREIGN KEY (liftgrpid) REFERENCES liftgrp(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT liftgrplift_lift_fk FOREIGN KEY (liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE liftrec
@@ -137,49 +116,51 @@ CREATE TABLE liftrec
   CONSTRAINT liftrec_lift_fk FOREIGN KEY(liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE workplan
+CREATE TABLE plan
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   enduserid INT NOT NULL,
   title VARCHAR(32) NOT NULL UNIQUE,	
-  CONSTRAINT workplan_pk PRIMARY KEY(enduserid, title),
-  CONSTRAINT workplan_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT plan_pk PRIMARY KEY(enduserid, title),
+  CONSTRAINT plan_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE workweek
+CREATE TABLE planweek
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  workplanid INT NOT NULL,
+  planid INT NOT NULL,
   title VARCHAR(32) NOT NULL UNIQUE,	
-  CONSTRAINT workweek_pk PRIMARY KEY(workplanid, title),
-  CONSTRAINT workweek_workplan_fk FOREIGN KEY(workplanid) REFERENCES workplan(id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT planweek_pk PRIMARY KEY(planid, title),
+  CONSTRAINT planweek_plan_fk FOREIGN KEY(planid) REFERENCES plan(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE workday
+CREATE TABLE planday
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  workweekid INT NOT NULL,
+  planweekid INT NOT NULL,
   title VARCHAR(32) NOT NULL UNIQUE,
-  CONSTRAINT workday_pk PRIMARY KEY(workweekid, title),
-  CONSTRAINT workday_workweek_fk FOREIGN KEY(workweekid) REFERENCES workweek(id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT planday_pk PRIMARY KEY(planweekid, title),
+  CONSTRAINT planday_planweek_fk FOREIGN KEY(planweekid) REFERENCES planweek(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE workout
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  enduserid INT NOT NULL,
+  plandayid INT NOT NULL,
   title VARCHAR(32) NOT NULL UNIQUE,
   CONSTRAINT workout_pk PRIMARY KEY(enduserid, title),
-  CONSTRAINT workout_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT workout_planday_fk FOREIGN KEY(plandayid) REFERENCES planday(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE exercise
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  enduserid INT NOT NULL,
+  workoutid INT NOT NULL,
   title VARCHAR(32) NOT NULL UNIQUE,
-  CONSTRAINT exercise_pk PRIMARY KEY(enduserid, title),
-  CONSTRAINT exercise_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
+  liftid INT,
+  CONSTRAINT exercise_pk PRIMARY KEY(workoutid, title),
+  CONSTRAINT exercise_workout_fk FOREIGN KEY(workoutid) REFERENCES workout(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT exercise_lift_fk FOREIGN KEY(liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE exerciseset
@@ -189,18 +170,7 @@ CREATE TABLE exerciseset
   title VARCHAR(32) NOT NULL UNIQUE,
   percent NUMERIC(2, 2) NOT NULL,
   reps INT NOT NULL,
-  CONSTRAINT iteration_pk PRIMARY KEY(exerciseid, title),
-  CONSTRAINT iteration_exercise_fk FOREIGN KEY(exerciseid) REFERENCES exercise(id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT exerciseset_pk PRIMARY KEY(exerciseid, title),
+  CONSTRAINT exerciseset_exercise_fk FOREIGN KEY(exerciseid) REFERENCES exercise(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE exerciseinst
-(
-  id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  exerciseid INT NOT NULL,
-  workoutid INT NOT NULL,
-  liftid INT,
-  CONSTRAINT exerciseinst_pk PRIMARY KEY (id),
-  CONSTRAINT exerciseinst_exercise_fk FOREIGN KEY(exerciseid) REFERENCES exercise(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT exerciseinst_workout_fk FOREIGN KEY(workoutid) REFERENCES workout(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT exerciseinst_lift_fk FOREIGN KEY(liftid) REFERENCES lift(id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
