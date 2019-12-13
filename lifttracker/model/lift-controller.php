@@ -171,36 +171,34 @@ class LiftController implements Controller {
   }
   public function liftsProcessEdit() {
     $msgList = array();
-    $addVal = Utils::getArg("addval");
-    $multiplyVal = Utils::getArg("multiplyval");
-    $subtractVal = Utils::getArg("subtractval");
+    $val = Utils::getArg("val");
     $user = DefaultController::getInstance()->getUser();
     $lifts = LiftRepository::getInstance()->getLifts($user->getId());
     foreach ($lifts as $lift) {
       if (Utils::getArg("lift" . $lift->getId()) != null) {
         if (Utils::getArg("add") != null) {
-          $lift->setTrainingWeight($lift->getTrainingWeight() + $addVal);
+          $lift->setTrainingWeight($lift->getTrainingWeight() + $val);
           $msgList = array_merge($msgList, LiftValidator::getInstance()->validate($lift));
           if (count($msgList) > 0) {
             break;
           }
           LiftRepository::getInstance()->updateLift($user->getId(), $lift);
         } else if (Utils::getArg("subtract") != null) {
-          $lift->setTrainingWeight($lift->getTrainingWeight() - $subtractVal);
+          $lift->setTrainingWeight($lift->getTrainingWeight() - $val);
           $msgList = array_merge($msgList, LiftValidator::getInstance()->validate($lift));
           if (count($msgList) > 0) {
             break;
           }
           LiftRepository::getInstance()->updateLift($user->getId(), $lift);
         } else if (Utils::getArg("multiply") != null) {
-          $lift->setTrainingWeight($lift->getTrainingWeight() * $multiplyVal);
+          $lift->setTrainingWeight($lift->getTrainingWeight() * $val);
           $msgList = array_merge($msgList, LiftValidator::getInstance()->validate($lift));
           if (count($msgList) > 0) {
             break;
           }
           LiftRepository::getInstance()->updateLift($user->getId(), $lift);
         } else {
-          $msgList = "No action given";
+          $msgList[] = "No action given";
           break;
         }
       }

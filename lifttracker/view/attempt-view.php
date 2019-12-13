@@ -8,43 +8,26 @@
   include("../includes/message.php");
 ?>
       <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Lift</label>
-        <div class="col-sm-4">
+        <label class="col-sm-1 col-form-label">Lift:</label>
+        <div class="col-sm-2">
           <a href="../main/index.php?controller=lift&action=liftview&liftid=<?php echo(htmlspecialchars($liftId)); ?>"><?php echo(htmlspecialchars($liftTitle)); ?></a>
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Weight</label>
-        <div class="col-sm-2">
-          <input class="form-control" type="text" value="<?php echo(htmlspecialchars($weight)); ?>" readonly />
-        </div>
+        <label class="col-sm-1 col-form-label">Weight:</label>
+        <span class="col-sm-2"><?php echo(htmlspecialchars($weight)); ?></span>
       </div>
       <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Reps</label>
-        <div class="col-sm-2">
-          <input class="form-control" type="text" value="<?php echo(htmlspecialchars($reps)); ?>" readonly />
-        </div>
+        <label class="col-sm-1 col-form-label">Reps:</label>
+        <span class="col-sm-2"><?php echo(htmlspecialchars($reps)); ?></span>
       </div>
       <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Date</label>
-        <div class="col-sm-2">
-          <input class="form-control" type="text" value="<?php echo(htmlspecialchars(Utils::toDisplayDate($occurrence))); ?>" readonly />
-        </div>
+        <label class="col-sm-1 col-form-label">Date:</label>
+        <span class="col-sm-2"><?php echo(htmlspecialchars(Utils::toDisplayDate($occurrence))); ?></span>
       </div>
       <div class="form-group row">
-        <div class="col-sm-6">
-          <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptdelete"); ?>">
-            <input type="hidden" name="attemptid" value="<?php echo(htmlspecialchars($attemptId)); ?>" class="form-control" />
-            <button class="col-sm-2 btn btn-primary pull-left" data-toggle="confirmation" type="submit">Delete</button>
-          </form>
-          <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptedit"); ?>">
-            <input type="hidden" name="attemptid" value="<?php echo(htmlspecialchars($attemptId)); ?>" class="form-control" />
-            <button class="col-sm-2 btn btn-primary pull-left" type="submit">Edit</button>
-          </form>
-          <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptsview"); ?>">
-            <button class="col-sm-2 btn btn-primary pull-left" type="submit">Attempts</button>
-          </form>
-        </div>
+        <a class="btn btn-primary" href="../main/index.php?controller=attempt&action=attemptedit&attemptid=<?php echo(htmlspecialchars($attemptId)); ?>">Edit Attempt</a>
+        <a class="btn btn-primary" data-toggle="confirmation" href="../main/index.php?controller=attempt&action=attemptdelete&attemptid=<?php echo(htmlspecialchars($attemptId)); ?>">Delete Attempt</a>
       </div>
     </div>
 <?php

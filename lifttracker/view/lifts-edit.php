@@ -2,7 +2,7 @@
   require_once("../includes/header.php");
 ?>
     <div class="container">
-      <h1>Change Training Weights</h1>
+      <h1>Change Weights</h1>
       <hr />
 <?php
   include("../includes/message.php");
@@ -27,33 +27,15 @@
   <?php } ?>
           </tbody>
         </table>
-      <div class="form-group row">
-        <div class="col-sm-2">
-          <div class="input-group">
-            <span class="input-group-btn">
-              <input type="submit" class="btn btn-primary" name="add" value="Add" />
-            </span>
-            <input type="number" class="form-control" name="addval" />
+        <div class="input-group col-md-3">
+          <div class="input-group-btn">
+            <input class="btn btn-primary" type="submit" name="add" value="Add" />
+            <input class="btn btn-primary" type="submit" name="subtract" value="Subtract" />
+            <input class="btn btn-primary" type="submit" name="multiply" value="Multiply" />
           </div>
+          <input type="number" class="form-control" placeholder="5" name="val" step="any" min="0" max="100" />
         </div>
-        <div class="col-sm-2">
-          <div class="input-group">
-            <span class="input-group-btn">
-              <input type="submit" class="btn btn-primary" name="subtract" value="Subtract" />
-            </span>
-            <input type="number" class="form-control" name="subtractval" />
-          </div>
-        </div>
-        <div class="col-sm-2">
-          <div class="input-group">
-            <span class="input-group-btn">
-              <input type="submit" class="btn btn-primary" name="multiply" value="Multiply" />
-            </span>
-            <input type="number" class="form-control" name="multiplyval" step="0.1" min="0" max="2" />
-          </div>
-        </div>
-      </div>
-     </form>
+      </form>
 <?php } ?>
     </div>
     <script>
