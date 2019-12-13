@@ -17,27 +17,25 @@
         <input type="hidden" name="liftid" value="<?php echo(htmlspecialchars($liftId)); ?>" class="form-control" />
 <?php } ?>
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Name</label>
-          <div class="col-sm-4">
+          <label class="col-sm-2 col-form-label">Name:</label>
+          <div class="col-sm-2">
             <input type="text" name="title" value="<?php echo(htmlspecialchars($title)); ?>" class="form-control" placeholder="Name of lift" required autofocus />
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Training Weight</label>
+          <label class="col-sm-2 col-form-label">Training Weight:</label>
           <div class="col-sm-2">
             <input type="number" name="trainingweight" value="<?php echo(htmlspecialchars($trainingWeight)); ?>" class="form-control" placeholder="180" required autofocus />
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-sm-6">
-            <button class="col-sm-2 btn btn-primary pull-left" type="submit">
+          <button class="col-sm-1 btn btn-primary" type="submit">
 <?php if (isset($liftId)) { ?>
-              Update
+            Update
 <?php } else { ?>
-              Add 
+            Add 
 <?php } ?>
-            </button>
-          </div>
+          </button>
         </div>
       </form>
     </div>
