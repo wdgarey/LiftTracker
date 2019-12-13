@@ -35,14 +35,14 @@
         <div class="col-sm-6">
           <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptdelete"); ?>">
             <input type="hidden" name="attemptid" value="<?php echo(htmlspecialchars($attemptId)); ?>" class="form-control" />
-            <button class="col-sm-2 btn btn-primary pull-right" data-toggle="confirmation" type="submit">Delete</button>
+            <button class="col-sm-2 btn btn-primary pull-left" data-toggle="confirmation" type="submit">Delete</button>
           </form>
           <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptedit"); ?>">
             <input type="hidden" name="attemptid" value="<?php echo(htmlspecialchars($attemptId)); ?>" class="form-control" />
-            <button class="col-sm-2 btn btn-primary pull-right" type="submit">Edit</button>
+            <button class="col-sm-2 btn btn-primary pull-left" type="submit">Edit</button>
           </form>
           <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptsview"); ?>">
-            <button class="col-sm-2 btn btn-primary pull-right" type="submit">Attempts</button>
+            <button class="col-sm-2 btn btn-primary pull-left" type="submit">Attempts</button>
           </form>
         </div>
       </div>

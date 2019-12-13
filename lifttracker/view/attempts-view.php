@@ -10,11 +10,13 @@
 <?php if (count($attempts) == 0) { ?>
       <h2>No attempts yet? Add one <a href="../main/index.php?controller=attempt&action=attemptadd">here</a>.</h2>
 <?php } else {?>
-      <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptadd"); ?>">
-        <div class="form-group row">
-          <button class="col-sm-1 btn btn-primary" type="submit">Add Attempt</button>
+      <div class="form-group row">
+        <div class="col-sm-6">
+          <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptadd"); ?>">
+            <button class="col-sm-1 btn btn-primary" type="submit">Add Attempt</button>
+          </form>
         </div>
-      </form>
+      </div>
       <table id="table" class="table table-striped">
         <thead>
           <tr>
