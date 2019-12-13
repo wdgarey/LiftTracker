@@ -11,14 +11,12 @@
       <h2>No lifts yet? Add one <a href="../main/index.php?controller=lift&action=liftadd">here</a>.</h2>
 <?php } else {?>
       <div class="form-group row">
-        <div class="col-sm-1">
+        <div class="col-sm-6">
           <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftadd"); ?>">
-            <button class="btn btn-primary" type="submit">Add Lift</button>
+            <button class="col-sm-1 btn btn-primary pull-left" type="submit">Add Lift</button>
           </form>
-        </div>
-        <div class="col-sm-1">
           <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftsedit"); ?>">
-            <button class="btn btn-primary" type="submit">Edit Lifts</button>
+            <button class="col-sm-1 btn btn-primary pull-left" type="submit">Edit Lifts</button>
           </form>
         </div>
       </div>

@@ -23,17 +23,17 @@
         <div class="col-sm-6">
           <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftdelete"); ?>">
             <input type="hidden" name="liftid" value="<?php echo(htmlspecialchars($liftId)); ?>" class="form-control" />
-            <button class="col-sm-2 btn btn-primary pull-right" data-toggle="confirmation" type="submit">Delete</button>
+            <button class="col-sm-2 btn btn-primary pull-left" data-toggle="confirmation" type="submit">Delete</button>
           </form>
           <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftedit"); ?>">
             <input type="hidden" name="liftid" value="<?php echo(htmlspecialchars($liftId)); ?>" class="form-control" />
-            <button class="col-sm-2 btn btn-primary pull-right" type="submit">Edit</button>
+            <button class="col-sm-2 btn btn-primary pull-left" type="submit">Edit</button>
           </form>
           <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftadd"); ?>">
-            <button class="col-sm-2 btn btn-primary pull-right" type="submit">Add New</button>
+            <button class="col-sm-2 btn btn-primary pull-left" type="submit">Add New</button>
           </form>
           <form method="POST" action="<?php echo("../main/index.php?controller=lift&action=liftsview"); ?>">
-            <button class="col-sm-2 btn btn-primary pull-right" type="submit">Lifts</button>
+            <button class="col-sm-2 btn btn-primary pull-left" type="submit">Lifts</button>
           </form>
         </div>
       </div>
@@ -42,11 +42,13 @@
 <?php } else {?>
       <h2>Attempts</h2>
       <hr />
-      <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptadd&liftid=" . htmlspecialchars($liftId)); ?>">
-        <div class="form-group row">
-          <button class="col-sm-1 btn btn-primary" type="submit">Add Attempt</button>
+      <div class="form-group row">
+        <div class="col-sm-6">
+          <form method="POST" action="<?php echo("../main/index.php?controller=attempt&action=attemptadd&liftid=" . htmlspecialchars($liftId)); ?>">
+            <button class="col-sm-2 btn btn-primary" type="submit">Add Attempt</button>
+          </form>
         </div>
-      </form>
+      </div>
       <table id="table" class="table table-striped">
         <thead>
           <tr>

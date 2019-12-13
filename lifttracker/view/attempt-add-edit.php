@@ -46,7 +46,7 @@
         </div>
         <div class="form-group row">
           <div class="col-sm-6">
-            <button class="col-sm-2 btn btn-primary pull-right" type="submit">
+            <button class="col-sm-2 btn btn-primary pull-left" type="submit">
 <?php if (isset($attemptId)) { ?>
               Update
 <?php } else { ?>
