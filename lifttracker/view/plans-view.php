@@ -25,7 +25,7 @@
         <tbody>
   <?php foreach ($plans as $plan) { ?>
           <tr>
-            <td><?php echo(htmlspecialchars($plan->getTitle())); ?></td>
+            <td><a href="../main/index.php?controller=plan&action=planview&planid=<?php echo(htmlspecialchars($plan->getId())); ?>"><?php echo(htmlspecialchars($plan->getTitle())); ?></a></td>
             <td style="text-align:center"><a href="../main/index.php?controller=plan&action=planview&planid=<?php echo(htmlspecialchars($plan->getId())); ?>"><img src="../images/view.png" alt="View" /></a></td>
             <td style="text-align:center"><a href="../main/index.php?controller=plan&action=planedit&planid=<?php echo(htmlspecialchars($plan->getId())); ?>"><img src="../images/edit.png" alt="Edit" /></a></td>
             <td style="text-align:center"><a data-toggle="confirmation" href="../main/index.php?controller=plan&action=plandelete&planid=<?php echo(htmlspecialchars($plan->getId())); ?>"><img src="../images/delete.png" alt="Delete" /></a></td>
