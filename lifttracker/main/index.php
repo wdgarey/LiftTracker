@@ -4,6 +4,7 @@ require_once("../model/controller-registry.php");
 require_once("../model/default-controller.php");
 require_once("../model/lift-controller.php");
 require_once("../model/plan-controller.php");
+require_once("../model/week-controller.php");
 require_once("../model/utils.php");
 error_reporting(E_ALL);
 Utils::adjustQuotes();

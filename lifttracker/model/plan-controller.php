@@ -1,6 +1,7 @@
 <?php
 require_once("controller.php");
 require_once("controller-registry.php");
+require_once("week-repository.php");
 require_once("plan.php");
 require_once("plan-repository.php");
 require_once("plan-validator.php");
@@ -133,6 +134,7 @@ class PlanController implements Controller {
       $plan = PlanRepository::getInstance()->getPlan($user->getId(), $planId);
       if ($plan != null) {
         $title = $plan->getTitle();
+        $weeks = WeekRepository::getInstance()->getWeeks($user->getId(), $planId);
       } else {
         $msg = "Plan not found.";
       }
