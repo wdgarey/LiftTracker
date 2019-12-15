@@ -120,25 +120,25 @@ CREATE TABLE plan
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   enduserid INT NOT NULL,
-  title VARCHAR(32) NOT NULL UNIQUE,	
+  title VARCHAR(32) NOT NULL,	
   CONSTRAINT plan_pk PRIMARY KEY(enduserid, title),
   CONSTRAINT plan_enduser_fk FOREIGN KEY(enduserid) REFERENCES enduser(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE planweek
+CREATE TABLE week
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   planid INT NOT NULL,
-  title VARCHAR(32) NOT NULL UNIQUE,	
-  CONSTRAINT planweek_pk PRIMARY KEY(planid, title),
-  CONSTRAINT planweek_plan_fk FOREIGN KEY(planid) REFERENCES plan(id) ON DELETE CASCADE ON UPDATE CASCADE
+  title VARCHAR(32) NOT NULL,	
+  CONSTRAINT week_pk PRIMARY KEY(planid, title),
+  CONSTRAINT week_plan_fk FOREIGN KEY(planid) REFERENCES plan(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE planday
+CREATE TABLE day
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   planweekid INT NOT NULL,
-  title VARCHAR(32) NOT NULL UNIQUE,
+  title VARCHAR(32) NOT NULL,
   CONSTRAINT planday_pk PRIMARY KEY(planweekid, title),
   CONSTRAINT planday_planweek_fk FOREIGN KEY(planweekid) REFERENCES planweek(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
@@ -147,7 +147,7 @@ CREATE TABLE workout
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   plandayid INT NOT NULL,
-  title VARCHAR(32) NOT NULL UNIQUE,
+  title VARCHAR(32) NOT NULL,
   CONSTRAINT workout_pk PRIMARY KEY(enduserid, title),
   CONSTRAINT workout_planday_fk FOREIGN KEY(plandayid) REFERENCES planday(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
@@ -156,7 +156,7 @@ CREATE TABLE exercise
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   workoutid INT NOT NULL,
-  title VARCHAR(32) NOT NULL UNIQUE,
+  title VARCHAR(32) NOT NULL,
   liftid INT,
   CONSTRAINT exercise_pk PRIMARY KEY(workoutid, title),
   CONSTRAINT exercise_workout_fk FOREIGN KEY(workoutid) REFERENCES workout(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -167,7 +167,7 @@ CREATE TABLE exerciseset
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   exerciseid INT,
-  title VARCHAR(32) NOT NULL UNIQUE,
+  title VARCHAR(32) NOT NULL,
   percent NUMERIC(2, 2) NOT NULL,
   reps INT NOT NULL,
   CONSTRAINT exerciseset_pk PRIMARY KEY(exerciseid, title),
