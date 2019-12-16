@@ -157,7 +157,7 @@ CREATE TABLE exercise
 CREATE TABLE exerciseset
 (
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
-  exerciseid INT,
+  exerciseid INT NOT NULL,
   title VARCHAR(32) NOT NULL,
   percent NUMERIC(2, 2) NOT NULL,
   reps INT NOT NULL,
