@@ -54,10 +54,27 @@
                           <?php echo(htmlspecialchars($exercise->getTitle())); ?>
                           <a href="../main/index.php?controller=exercise&action=exerciseedit&exerciseid=<?php echo(htmlspecialchars($exercise->getId())); ?>">Edit</a>
                           | <a data-toggle="confirmation" href="../main/index.php?controller=exercise&action=exercisedelete&exerciseid=<?php echo(htmlspecialchars($exercise->getId())); ?>">Delete</a>
+              <?php if (count($exercise->getSets()) > 0) { ?>
+                          | <a href="../main/index.php?controller=set&action=setadd&exerciseid=<?php echo(htmlspecialchars($exercise->getId())); ?>">Add Set</a>
+              <?php } ?>
                         </div>
                         <div class="panel-body">
-              <?php if ($exercise->hasLiftTitle()) { ?>
-                <?php echo(htmlspecialchars($exercise->getLiftTitle())); ?>
+              <?php if ($exercise->hasLift()) { ?>
+                <?php echo(htmlspecialchars($exercise->getLift()->getTitle())); ?> (<?php echo(htmlspecialchars($exercise->getLift()->getTrainingWeight())); ?>)
+                        <br />
+              <?php } ?>
+              <?php if (count($exercise->getSets()) == 0) { ?>
+                          No sets yet? Add one <a href="../main/index.php?controller=set&action=setadd&exerciseid=<?php echo(htmlspecialchars($exercise->getId())); ?>">here</a>.
+              <?php } else {?>
+                        <ul>
+                <?php foreach ($exercise->getSets() as $set) { ?>
+                          <li>
+                            <?php echo(htmlspecialchars($set->getReps())); ?> reps of <?php echo(htmlspecialchars($set->getPercent() * $exercise->getLift()->getTrainingWeight())); ?> (<?php echo(htmlspecialchars($set->getPercent() * 100.0)); ?>%)
+                            <a href="../main/index.php?controller=set&action=setedit&setid=<?php echo(htmlspecialchars($set->getId())); ?>">Edit</a>
+                            | <a data-toggle="confirmation" href="../main/index.php?controller=set&action=setdelete&setid=<?php echo(htmlspecialchars($set->getId())); ?>">Delete</a>
+                          </li>
+                <?php } ?>
+                        </ul>
               <?php } ?>
                         </div>
                       </div>

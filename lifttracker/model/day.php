@@ -3,7 +3,7 @@ class Day {
   private $mId;
   private $mTitle;
   private $mWeekId;
-  private $mExercies;
+  private $mExercises;
   public function getId() {
     return $this->mId;
   }
@@ -14,7 +14,7 @@ class Day {
     return $this->mWeekId;
   }
   public function getExercises() {
-    return $this->mExercies;
+    return $this->mExercises;
   }
   public function setId($id) {
     $this->mId = $id;
@@ -25,23 +25,23 @@ class Day {
   public function setWeekId($weekId) {
     $this->mWeekId = $weekId;
   }
-  public function setExercises($days) {
-    $this->mExercies = $days;
+  public function setExercises($exercises) {
+    $this->mExercises = $exercises;
   }
   public function __construct() {
     $this->mId = null;
     $this->mTitle = null;
     $this->mWeekId = null;
-    $this->mExercies = null;
+    $this->mExercises = null;
   }
   public function initialize($array) {
     $this->setId($array["id"]);
     $this->setTitle($array["title"]);
     $this->setWeekId($array["weekid"]);
-    $this->mExercies = null;
+    $this->mExercises = null;
   }
-  public function hasExercies() {
-    return ($this->mExercies != null);
+  public function hasExercises() {
+    return ($this->mExercises != null);
   }
 }
 ?>

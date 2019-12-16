@@ -5,6 +5,7 @@ require_once("week-repository.php");
 require_once("day-repository.php");
 require_once("exercise-repository.php");
 require_once("lift-repository.php");
+require_once("set-repository.php");
 require_once("plan.php");
 require_once("plan-repository.php");
 require_once("plan-validator.php");
@@ -146,10 +147,12 @@ class PlanController implements Controller {
             $exercises = ExerciseRepository::getInstance()->getExercises($user->getId(), $day->getId());
             $day->setExercises($exercises);
             foreach ($exercises as $exercise) {
-              $found = false;
-              for ($i = 0; $i < count($lifts) && $found == false; $i++) {
+              $sets = SetRepository::getInstance()->getSets($user->getId(), $exercise->getId());
+              $exercise->setSets($sets);
+              $liftFound = false;
+              for ($i = 0; $i < count($lifts) && $liftFound == false; $i++) {
                 if ($exercise->getLiftId() == $lifts[$i]->getId()) {
-                  $exercise->setLiftTitle($lifts[$i]->getTitle());
+                  $exercise->setLift($lifts[$i]);
                 }
               }
             }

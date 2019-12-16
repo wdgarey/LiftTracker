@@ -159,7 +159,7 @@ CREATE TABLE exerciseset
   id INT NOT NULL UNIQUE AUTO_INCREMENT,
   exerciseid INT NOT NULL,
   title VARCHAR(32) NOT NULL,
-  percent NUMERIC(2, 2) NOT NULL,
+  percent DOUBLE(3, 2) NOT NULL,
   reps INT NOT NULL,
   CONSTRAINT exerciseset_pk PRIMARY KEY(exerciseid, title),
   CONSTRAINT exerciseset_exercise_fk FOREIGN KEY(exerciseid) REFERENCES exercise(id) ON DELETE CASCADE ON UPDATE CASCADE

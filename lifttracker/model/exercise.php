@@ -1,10 +1,11 @@
 <?php
-class Exercise {
+class Exercise{
   private $mId;
   private $mTitle;
   private $mDayId;
   private $mLiftId;
-  private $mLiftTitle;
+  private $mLift;
+  private $mSets;
   public function getId() {
     return $this->mId;
   }
@@ -17,8 +18,11 @@ class Exercise {
   public function getLiftId() {
     return $this->mLiftId;
   }
-  public function getLiftTitle() {
-    return $this->mLiftTitle;
+  public function getLift() {
+    return $this->mLift;
+  }
+  public function getSets() {
+    return $this->mSets;
   }
   public function setId($id) {
     $this->mId = $id;
@@ -32,25 +36,33 @@ class Exercise {
   public function setLiftId($liftId) {
     $this->mLiftId = ($liftId == "" ? null : $liftId);
   }
-  public function setLiftTitle($liftName) {
-    $this->mLiftTitle = $liftName;
+  public function setLift($lift) {
+    $this->mLift = $lift;
+  }
+  public function setSets($exercises) {
+    $this->mSets = $exercises;
   }
   public function __construct() {
     $this->mId = null;
     $this->mTitle = null;
     $this->mDayId = null;
     $this->mLiftId = null;
-    $this->mLiftTitle = null;
+    $this->mLift = null;
+    $this->mSets = null;
   }
   public function initialize($array) {
     $this->setId($array["id"]);
     $this->setTitle($array["title"]);
     $this->setDayId($array["dayid"]);
     $this->setLiftId($array["liftid"]);
-    $this->mLiftTitle = null;
+    $this->mLift = null;
+    $this->mSets = null;
   }
-  public function hasLiftTitle() {
-    return ($this->mLiftTitle != null);
+  public function hasLift() {
+    return ($this->mLift != null);
+  }
+  public function hasSets() {
+    return ($this->mSets != null);
   }
 }
 ?>
