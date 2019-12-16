@@ -1,20 +1,16 @@
 <?php
-class Week {
+class Day {
   private $mId;
   private $mTitle;
-  private $mPlanId;
-  private $mDays;
+  private $mWeekId;
   public function getId() {
     return $this->mId;
   }
   public function getTitle() {
     return $this->mTitle;
   }
-  public function getPlanId() {
-    return $this->mPlanId;
-  }
-  public function getDays() {
-    return $this->mDays;
+  public function getWeekId() {
+    return $this->mWeekId;
   }
   public function setId($id) {
     $this->mId = $id;
@@ -22,26 +18,18 @@ class Week {
   public function setTitle($title) {
     $this->mTitle = $title;
   }
-  public function setPlanId($planId) {
-    $this->mPlanId = $planId;
-  }
-  public function setDays($days) {
-    $this->mDays = $days;
+  public function setWeekId($weekId) {
+    $this->mWeekId = $weekId;
   }
   public function __construct() {
     $this->mId = null;
     $this->mTitle = null;
-    $this->mPlanId = null;
-    $this->mDays = null;
+    $this->mWeekId = null;
   }
   public function initialize($array) {
     $this->setId($array["id"]);
     $this->setTitle($array["title"]);
-    $this->setPlanId($array["planid"]);
-    $this->mDays = null;
-  }
-  public function hasDays() {
-    return ($this->mDays != null);
+    $this->setWeekId($array["weekid"]);
   }
 }
 ?>
