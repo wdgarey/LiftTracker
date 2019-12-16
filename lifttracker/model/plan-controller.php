@@ -3,6 +3,8 @@ require_once("controller.php");
 require_once("controller-registry.php");
 require_once("week-repository.php");
 require_once("day-repository.php");
+require_once("exercise-repository.php");
+require_once("lift-repository.php");
 require_once("plan.php");
 require_once("plan-repository.php");
 require_once("plan-validator.php");
@@ -131,6 +133,7 @@ class PlanController implements Controller {
     $title = "";
     $planId = Utils::getArg("planid");
     $user = DefaultController::getInstance()->getUser();
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
     if ($planId != null) {
       $plan = PlanRepository::getInstance()->getPlan($user->getId(), $planId);
       if ($plan != null) {
@@ -139,6 +142,18 @@ class PlanController implements Controller {
         foreach ($weeks as $week) {
           $days = DayRepository::getInstance()->getDays($user->getId(), $week->getId());
           $week->setDays($days);
+          foreach ($days as $day) {
+            $exercises = ExerciseRepository::getInstance()->getExercises($user->getId(), $day->getId());
+            $day->setExercises($exercises);
+            foreach ($exercises as $exercise) {
+              $found = false;
+              for ($i = 0; $i < count($lifts) && $found == false; $i++) {
+                if ($exercise->getLiftId() == $lifts[$i]->getId()) {
+                  $exercise->setLiftTitle($lifts[$i]->getTitle());
+                }
+              }
+            }
+          }
         }
       } else {
         $msg = "Plan not found.";

@@ -6,6 +6,7 @@ require_once("../model/lift-controller.php");
 require_once("../model/plan-controller.php");
 require_once("../model/week-controller.php");
 require_once("../model/day-controller.php");
+require_once("../model/exercise-controller.php");
 require_once("../model/utils.php");
 error_reporting(E_ALL);
 Utils::adjustQuotes();

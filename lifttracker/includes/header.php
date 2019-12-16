@@ -23,10 +23,10 @@
     <link rel="shortcut icon" href="../images/ah_icon.ico" />
     <link rel="stylesheet" href="../css/stylesheet.css" />
     <link rel="stylesheet" href="../css/bootstrap.css" />
-    <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="../js/bootstrap.js"></script>
-    <script type="text/javascript" src="../js/bootstrap-confirmation.min.js"></script>
+    <script src="../js/jquery-1.9.1.min.js"></script>
+    <script src="../js/jquery.tablesorter.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/bootstrap-confirmation.min.js"></script>
   </head>
   <body>
     <?php if (DefaultController::getInstance()->isLoggedIn ()) { ?>
