@@ -2,6 +2,8 @@
 require_once("controller.php");
 require_once("controller-registry.php");
 require_once("default-repository.php");
+require_once("plan-repository.php");
+require_once("lift-repository.php");
 require_once("password-validator.php");
 require_once("user.php");
 require_once("user-validator.php");
@@ -67,6 +69,9 @@ class DefaultController implements Controller {
     }
   }
   public function home() {
+    $user = DefaultController::getInstance()->getUser();
+    $lifts = LiftRepository::getInstance()->getLifts($user->getId());
+    $plans = PlanRepository::getInstance()->getPlansUser($user->getId());
     include("../view/home.php");
   }
   public function isLoggedIn() {

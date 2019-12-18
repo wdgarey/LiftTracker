@@ -2,7 +2,7 @@
   require_once("../includes/header.php");
 ?>
     <div class="container">
-      <h1>View Attempt</h1>
+      <h1>Attempt</h1>
       <hr />
 <?php
   include("../includes/message.php");
