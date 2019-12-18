@@ -28,10 +28,10 @@
               | <a href="../main/index.php?controller=day&action=dayadd&weekid=<?php echo(htmlspecialchars($week->getId())); ?>">Add Day</a>
     <?php }?>
             </div>
+            <div class="panel-body">
     <?php if (count($week->getDays()) == 0) { ?>
             <h3>No days yet? Add one <a href="../main/index.php?controller=day&action=dayadd&weekid=<?php echo(htmlspecialchars($week->getId())); ?>">here</a>.</h3>
     <?php } else {?>
-            <div class="panel-body">
               <div class="row">
       <?php foreach ($week->getDays() as $day) { ?>
                 <div class="col-md-4">
@@ -60,8 +60,10 @@
                         </div>
                         <div class="panel-body">
               <?php if ($exercise->hasLift()) { ?>
-                <?php echo(htmlspecialchars($exercise->getLift()->getTitle())); ?> (<?php echo(htmlspecialchars($exercise->getLift()->getTrainingWeight())); ?>)
-                        <br />
+                <a href="../main/index.php?controller=lift&action=liftview&liftid=<?php echo(htmlspecialchars($exercise->getLift()->getId())); ?>">
+                  <?php echo(htmlspecialchars($exercise->getLift()->getTitle())); ?>
+                </a>
+                (<?php echo(htmlspecialchars($exercise->getLift()->getTrainingWeight())); ?>)
               <?php } ?>
               <?php if (count($exercise->getSets()) == 0) { ?>
                           No sets yet? Add one <a href="../main/index.php?controller=set&action=setadd&exerciseid=<?php echo(htmlspecialchars($exercise->getId())); ?>">here</a>.
@@ -69,9 +71,16 @@
                         <ul>
                 <?php foreach ($exercise->getSets() as $set) { ?>
                           <li>
-                            <?php echo(htmlspecialchars($set->getReps())); ?> reps of <?php echo(htmlspecialchars($set->getPercent() * $exercise->getLift()->getTrainingWeight())); ?> (<?php echo(htmlspecialchars($set->getPercent() * 100.0)); ?>%)
+                  <?php if ($exercise->hasLift()) { ?>
+                            <?php echo(htmlspecialchars($set->getReps())); ?> reps of
+                            <?php echo(htmlspecialchars($set->getPercent() * $exercise->getLift()->getTrainingWeight())); ?>
+                            (<?php echo(htmlspecialchars($set->getPercent() * 100.0)); ?>%)
                             <a href="../main/index.php?controller=set&action=setedit&setid=<?php echo(htmlspecialchars($set->getId())); ?>">Edit</a>
                             | <a data-toggle="confirmation" href="../main/index.php?controller=set&action=setdelete&setid=<?php echo(htmlspecialchars($set->getId())); ?>">Delete</a>
+                  <?php } else {?>
+                            <?php echo(htmlspecialchars($set->getReps())); ?> reps at
+                            <?php echo(htmlspecialchars($set->getPercent() * 100.0)); ?>%
+                  <?php } ?>
                           </li>
                 <?php } ?>
                         </ul>
@@ -85,8 +94,8 @@
                 </div>
       <?php } ?>
               </div>
-            </div>
     <?php } ?>
+            </div>
   <?php } ?>
           </div>
 <?php } ?>
