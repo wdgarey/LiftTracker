@@ -95,6 +95,7 @@ class AttemptRepository extends Repository {
       . " FROM lifttracker.liftrec a"
       . "   INNER JOIN lifttracker.lift l ON l.id = a.liftid"
       . " WHERE l.enduserid = :enduserid"
+      . " ORDER BY a.occurrence DESC"
       . ";";
     $stmt = $conn->prepare($query);
     $stmt->bindValue(':enduserid', $userId, PDO::PARAM_INT);
@@ -116,6 +117,7 @@ class AttemptRepository extends Repository {
       . "   INNER JOIN lifttracker.lift l ON l.id = a.liftid"
       . " WHERE l.enduserid = :enduserid"
       . "   AND l.id = :liftid"
+      . " ORDER BY a.occurrence DESC"
       . ";";
     $stmt = $conn->prepare($query);
     $stmt->bindValue(':enduserid', $userId, PDO::PARAM_INT);
