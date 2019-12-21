@@ -79,7 +79,7 @@
 		        markerType: "square",
 		        xValueFormatString: "DD MMM, YYYY",
             color: "<?php echo sprintf('#%06X', mt_rand(0, 0xFFFFFF)); ?>",
-		        yValueFormatString: "#,##0K",
+		        yValueFormatString: "#,##0",
 		        dataPoints: [
   <?php $attemptCount = 1; ?>
   <?php foreach ($lift->getAttempts() as $attempt) { ?>
