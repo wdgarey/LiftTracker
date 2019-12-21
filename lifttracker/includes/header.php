@@ -27,6 +27,7 @@
     <script src="../js/jquery.tablesorter.js"></script>
     <script src="../js/bootstrap.js"></script>
     <script src="../js/bootstrap-confirmation.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
   </head>
   <body>
     <?php if (DefaultController::getInstance()->isLoggedIn ()) { ?>

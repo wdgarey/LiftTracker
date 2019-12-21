@@ -191,6 +191,7 @@ class AttemptController implements Controller {
     $attempts = AttemptRepository::getInstance()->getAttemptsUser($user->getId());
     $lifts = LiftRepository::getInstance()->getLifts($user->getId());
     foreach ($lifts as $lift) {
+      $lift->setAttempts(AttemptRepository::getInstance()->getAttemptsLift($user->getId(), $lift->getId()));
       $liftId = $lift->getId();
       $liftTitles["$liftId"] = $lift->getTitle();
     }
