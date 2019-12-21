@@ -48,7 +48,7 @@
             <li><a href="../main/index.php">Home</a></li>
             <li><a href="../main/index.php?controller=lift&action=liftsview">Lifts</a></li>
             <li><a href="../main/index.php?controller=plan&action=plansview">Plans</a></li>
-            <li><a href="../main/index.php?controller=attempt&action=attemptsview">Attempts</a></li>
+            <li><a href="../main/index.php?controller=attempt&action=attemptsview">Progress</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -57,7 +57,7 @@
                 <li><a href="../main/index.php?controller=default&action=selfedit">Profile</a></li>
                 <li><a href="../main/index.php?controller=lift&action=liftsview">Lifts</a></li>
                 <li><a href="../main/index.php?controller=plan&action=plansview">Plans</a></li>
-                <li><a href="../main/index.php?controller=attempt&action=attemptsview">Attempts</a></li>
+                <li><a href="../main/index.php?controller=attempt&action=attemptsview">Progress</a></li>
                 <li class="divider"></li>
                 <li><a href="../main/index.php?controller=default&action=logout">Logout</a></li>
               </ul>
