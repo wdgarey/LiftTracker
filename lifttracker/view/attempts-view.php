@@ -51,8 +51,9 @@
       window.onload = function () {
 
       var options = {
-	      animationEnabled: true,
+	      animationEnabled: false,
 	      theme: "light2",
+	      zoomEnabled: true,
 	      axisX:{
 		      valueFormatString: "DD MMM"
 	      },
