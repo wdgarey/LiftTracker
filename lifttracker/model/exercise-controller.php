@@ -142,6 +142,7 @@ class ExerciseController implements Controller {
           $msg = "Could not add exercise";
         } else {
           $title = "";
+          $liftId = "";
         }
       } else {
         $rows = ExerciseRepository::getInstance()->updateExercise($user->getId(), $exercise);
