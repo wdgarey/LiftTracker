@@ -24,13 +24,16 @@
           </div>
         </div>
         <div class="form-group row">
-          <button class="col-sm-1 btn btn-primary" type="submit">
+          <button class="btn btn-primary" type="submit">
 <?php if (isset($dayId)) { ?>
             Update
 <?php } else { ?>
             Add 
 <?php } ?>
           </button>
+<?php if (isset($planId)) { ?>
+          <a class="btn btn-primary" href="../main/index.php?controller=plan&action=planview&planid=<?php echo(htmlspecialchars($planId)); ?>">View Plan</a>
+<?php } ?>
         </div>
       </form>
     </div>

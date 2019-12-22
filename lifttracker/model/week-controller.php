@@ -122,11 +122,18 @@ class WeekController implements Controller {
       }
     } else {
       if ($weekId == null) {
-        $weekId = WeekRepository::getInstance()->addWeek($user->getId(), $week);
-        Utils::redirect("index.php?controller=plan&action=planview&planid=" . $week->getPlanId());
+        if (WeekRepository::getInstance()->addWeek($user->getId(), $week) == null) {
+          $msg = "Could not add week";
+        } else {
+          $title = "";
+        }
       } else {
-        WeekRepository::getInstance()->updateWeek($user->getId(), $week);
-        Utils::redirect("index.php?controller=plan&action=planview&planid=" . $week->getPlanId());
+        $rows = WeekRepository::getInstance()->updateWeek($user->getId(), $week);
+        if ($rows == 0) {
+          $msg = "Could not update week";
+        } else {
+          Utils::redirect("index.php?controller=plan&action=planview&planid=" . $week->getPlanId());
+        }
       }
     }
     require("../view/week-add-edit.php");

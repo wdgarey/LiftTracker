@@ -3,6 +3,7 @@ require_once("controller.php");
 require_once("controller-registry.php");
 require_once("day.php");
 require_once("day-repository.php");
+require_once("week-repository.php");
 require_once("day-validator.php");
 require_once("user.php");
 require_once("utils.php");
@@ -122,20 +123,21 @@ class DayController implements Controller {
         $msg = "Could not update day";
       }
     } else {
+      $week = WeekRepository::getInstance()->getWeek($user->getId(), $weekId);
+      if ($week != null) {
+        $planId = $week->getPlanId();
+      }
       if ($dayId == null) {
-        $dayId = DayRepository::getInstance()->addDay($user->getId(), $day);
-        if ($dayId == null) {
+        if (DayRepository::getInstance()->addDay($user->getId(), $day) == null) {
           $msg = "Could not add day";
         } else {
-          $planId = DayRepository::getInstance()->getPlanId($user->getId(), $dayId);
-          Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
+          $title = "";
         }
       } else {
         $rows = DayRepository::getInstance()->updateDay($user->getId(), $day);
         if ($rows == 0) {
           $msg = "Could not update day";
         } else {
-          $planId = DayRepository::getInstance()->getPlanId($user->getId(), $dayId);
           Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
         }
       }

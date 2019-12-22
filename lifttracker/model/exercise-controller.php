@@ -4,6 +4,7 @@ require_once("controller-registry.php");
 require_once("exercise.php");
 require_once("exercise-repository.php");
 require_once("exercise-validator.php");
+require_once("day-repository.php");
 require_once("lift-repository.php");
 require_once("user.php");
 require_once("utils.php");
@@ -135,20 +136,18 @@ class ExerciseController implements Controller {
         $msg = "Could not update exercise";
       }
     } else {
+      $planId = DayRepository::getInstance()->getPlanId($user->getId(), $dayId);
       if ($exerciseId == null) {
-        $exerciseId = ExerciseRepository::getInstance()->addExercise($user->getId(), $exercise);
-        if ($exerciseId == null) {
+        if (ExerciseRepository::getInstance()->addExercise($user->getId(), $exercise) == null) {
           $msg = "Could not add exercise";
         } else {
-          $planId = ExerciseRepository::getInstance()->getPlanId($user->getId(), $exerciseId);
-          Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
+          $title = "";
         }
       } else {
         $rows = ExerciseRepository::getInstance()->updateExercise($user->getId(), $exercise);
         if ($rows == 0) {
           $msg = "Could not update exercise";
         } else {
-          $planId = ExerciseRepository::getInstance()->getPlanId($user->getId(), $exerciseId);
           Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
         }
       }

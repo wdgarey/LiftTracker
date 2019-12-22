@@ -4,6 +4,7 @@ require_once("controller-registry.php");
 require_once("set.php");
 require_once("set-repository.php");
 require_once("set-validator.php");
+require_once("exercise-repository.php");
 require_once("user.php");
 require_once("utils.php");
 
@@ -54,8 +55,8 @@ class SetController implements Controller {
     $exerciseId = Utils::getArg("exerciseid");
     $user = DefaultController::getInstance()->getUser();
     $title = "";
-    $reps = 0;
-    $percent = 0;
+    $reps = "";
+    $percent = "";
     if ($exerciseId == null) {
       $msg = "No exercise ID given.";
     }
@@ -82,8 +83,8 @@ class SetController implements Controller {
     $setId = Utils::getArg("setid");
     $user = DefaultController::getInstance()->getUser();
     $title = "";
-    $reps = 0;
-    $percent = 0;
+    $reps = "";
+    $percent = "";
     if ($setId != null) {
       $set = SetRepository::getInstance()->getSet($user->getId(), $setId);
       if ($set != null) {
@@ -133,20 +134,20 @@ class SetController implements Controller {
         $msg = "Could not update set";
       }
     } else {
+      $planId = ExerciseRepository::getInstance()->getPlanId($user->getId(), $exerciseId);
       if ($setId == null) {
-        $setId = SetRepository::getInstance()->addSet($user->getId(), $set);
-        if ($setId == null) {
+        if (SetRepository::getInstance()->addSet($user->getId(), $set) == null) {
           $msg = "Could not add set";
         } else {
-          $planId = SetRepository::getInstance()->getPlanId($user->getId(), $setId);
-          Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
+          $title = "";
+          $reps = "";
+          $percent = "";
         }
       } else {
         $rows = SetRepository::getInstance()->updateSet($user->getId(), $set);
         if ($rows == 0) {
           $msg = "Could not update set";
         } else {
-          $planId = SetRepository::getInstance()->getPlanId($user->getId(), $setId);
           Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
         }
       }

@@ -24,25 +24,28 @@
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-1 col-form-label">Reps:</label>
-          <div class="col-sm-2">
-            <input type="number" name="reps" value="<?php echo(htmlspecialchars($reps)); ?>" class="form-control" placeholder="5" required autofocus />
-          </div>
-        </div>
-        <div class="form-group row">
           <label class="col-sm-1 col-form-label">Percentage:</label>
           <div class="col-sm-2">
             <input type="number" name="percent" value="<?php echo(htmlspecialchars($percent)); ?>" class="form-control" placeholder="50" min="0" max="200" step="any" required autofocus />
           </div>
         </div>
         <div class="form-group row">
-          <button class="col-sm-1 btn btn-primary" type="submit">
+          <label class="col-sm-1 col-form-label">Reps:</label>
+          <div class="col-sm-2">
+            <input type="number" name="reps" value="<?php echo(htmlspecialchars($reps)); ?>" class="form-control" placeholder="5" required autofocus />
+          </div>
+        </div>
+        <div class="form-group row">
+          <button class="btn btn-primary" type="submit">
 <?php if (isset($setId)) { ?>
             Update
 <?php } else { ?>
             Add 
 <?php } ?>
           </button>
+<?php if (isset($planId)) { ?>
+          <a class="btn btn-primary" href="../main/index.php?controller=plan&action=planview&planid=<?php echo(htmlspecialchars($planId)); ?>">View Plan</a>
+<?php } ?>
         </div>
       </form>
     </div>
