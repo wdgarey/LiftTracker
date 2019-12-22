@@ -134,8 +134,8 @@ class SetController implements Controller {
         $msg = "Could not update set";
       }
     } else {
-      $planId = ExerciseRepository::getInstance()->getPlanId($user->getId(), $exerciseId);
       if ($setId == null) {
+        $planId = ExerciseRepository::getInstance()->getPlanId($user->getId(), $exerciseId);
         if (SetRepository::getInstance()->addSet($user->getId(), $set) == null) {
           $msg = "Could not add set";
         } else {
@@ -148,6 +148,7 @@ class SetController implements Controller {
         if ($rows == 0) {
           $msg = "Could not update set";
         } else {
+          $planId = SetRepository::getInstance()->getPlanId($user->getId(), $setId);
           Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
         }
       }

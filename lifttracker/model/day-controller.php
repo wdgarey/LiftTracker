@@ -123,11 +123,11 @@ class DayController implements Controller {
         $msg = "Could not update day";
       }
     } else {
-      $week = WeekRepository::getInstance()->getWeek($user->getId(), $weekId);
-      if ($week != null) {
-        $planId = $week->getPlanId();
-      }
       if ($dayId == null) {
+        $week = WeekRepository::getInstance()->getWeek($user->getId(), $weekId);
+        if ($week != null) {
+          $planId = $week->getPlanId();
+        }
         if (DayRepository::getInstance()->addDay($user->getId(), $day) == null) {
           $msg = "Could not add day";
         } else {
@@ -138,6 +138,7 @@ class DayController implements Controller {
         if ($rows == 0) {
           $msg = "Could not update day";
         } else {
+          $planId = DayRepository::getInstance()->getPlanId($user->getId(), $dayId);
           Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
         }
       }

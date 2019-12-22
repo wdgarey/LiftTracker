@@ -136,8 +136,8 @@ class ExerciseController implements Controller {
         $msg = "Could not update exercise";
       }
     } else {
-      $planId = DayRepository::getInstance()->getPlanId($user->getId(), $dayId);
       if ($exerciseId == null) {
+        $planId = DayRepository::getInstance()->getPlanId($user->getId(), $dayId);
         if (ExerciseRepository::getInstance()->addExercise($user->getId(), $exercise) == null) {
           $msg = "Could not add exercise";
         } else {
@@ -148,6 +148,7 @@ class ExerciseController implements Controller {
         if ($rows == 0) {
           $msg = "Could not update exercise";
         } else {
+          $planId = ExerciseRepository::getInstance()->getPlanId($user->getId(), $exerciseId);
           Utils::redirect("index.php?controller=plan&action=planview&planid=" . $planId);
         }
       }
