@@ -80,6 +80,8 @@
                   <?php } else {?>
                             <?php echo(htmlspecialchars($set->getReps())); ?> reps at
                             <?php echo(htmlspecialchars($set->getPercent() * 100.0)); ?>%
+                            <a href="../main/index.php?controller=set&action=setedit&setid=<?php echo(htmlspecialchars($set->getId())); ?>">Edit</a>
+                            | <a data-toggle="confirmation" href="../main/index.php?controller=set&action=setdelete&setid=<?php echo(htmlspecialchars($set->getId())); ?>">Delete</a>
                   <?php } ?>
                           </li>
                 <?php } ?>
