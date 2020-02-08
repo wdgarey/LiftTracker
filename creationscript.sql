@@ -22,8 +22,8 @@ CREATE TABLE enduser
 ) ENGINE=InnoDB;
 
 INSERT INTO enduser (id, username, email, pwd, vital, firstname, lastname, height, weight) VALUES
-  (1, 'admin', '', Sha1('pimp99'), 1, '', '', 0, 0),
-  (2, 'wdgarey', 'w.d.garey@eagle.clarion.edu', Sha1('pimp99'), 0, 'Wes', 'G', 68, 160);
+  (1, 'admin', '', Sha1('admin'), 1, '', '', 0, 0),
+  (2, 'wdgarey', 'w.d.garey@eagle.clarion.edu', Sha1('password'), 0, 'Wes', 'G', 68, 160);
 
 CREATE TABLE role
 (
