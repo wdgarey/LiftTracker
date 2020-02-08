@@ -40,7 +40,7 @@ class DefaultController implements Controller {
         && $action != "loginprocess"
         && $action != "selfadd"
         && $action != "selfprocessaddedit") {
-      $url = "index.php?controller=default&action=login";
+      $url = "index.php?controller=default&action=login&uri=" . urlencode(Utils::getRequestedUri());
       Utils::redirect($url);
     } else {
       switch ($action) {
@@ -89,6 +89,7 @@ class DefaultController implements Controller {
     if ($this->isLoggedIn ()) {
       Utils::redirect("../index.php");
     }
+    $uri = Utils::getArg("uri");
     $username = Utils::getArg("username");
     $password = Utils::getArg("password");
     if ($username == null) {
@@ -103,7 +104,11 @@ class DefaultController implements Controller {
         $msg = "Invalid username and/or password.";
       } else {
         $this->setUser($user);
-        Utils::redirect("../index.php");
+        if ($uri == null) {
+          Utils::redirect("../index.php");
+        } else {
+          Utils::redirect($uri);
+        }
       }
     }
     $password = "";
@@ -113,6 +118,7 @@ class DefaultController implements Controller {
     if ($this->isLoggedIn ()) {
       Utils::redirect("../index.php");
     }
+    $uri = Utils::getArg("uri");
     $username = Utils::getArg("username");
     $password = "";
     if ($username == null) {

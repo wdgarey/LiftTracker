@@ -27,7 +27,7 @@ class WeekController implements Controller {
   public function handleRequest() {
     $action = Utils::getArg("action");
     if (!DefaultController::getInstance()->isLoggedIn()) {
-      $url = "index.php?controller=default&action=login";
+      $url = "index.php?controller=default&action=login&uri=" . urlencode(Utils::getRequestedUri());
       Utils::redirect($url);
     } else {
       switch ($action) {
